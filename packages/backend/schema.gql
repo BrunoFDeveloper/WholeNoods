@@ -12,8 +12,10 @@ type HomePage {
 }
 
 type Mutation {
+  convertToCreator: User!
   signin(email: String!, password: String!): AuthResult!
   signup(email: String!, name: String!, password: String!): AuthResult!
+  subscribe(user: ID!): User!
 }
 
 type Post {
@@ -31,14 +33,20 @@ enum PostType {
 
 type Query {
   home: HomePage!
+  user(id: ID!): User!
   viewer: User
 }
 
 type User {
+  bio: String
   displayName: String!
   email: String!
   id: ID!
+  isCurrentlySubscribed: Boolean!
   legalName: String!
+  posts: [Post!]!
+  postsCount: Int!
+  subscribersCount: Int!
   type: UserType!
 }
 

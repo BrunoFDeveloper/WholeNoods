@@ -1,19 +1,32 @@
 import "reflect-metadata";
-import { buildSchema } from "type-graphql";
+import { AuthChecker, buildSchema } from "type-graphql";
 import { ApolloServer } from "apollo-server";
 import { AuthResolver } from "./resolvers/AuthResolver";
 import { createConnection } from "typeorm";
 import { User } from "./entities/User";
+import { Subscription } from "./entities/Subscription";
 import { Context } from "./types";
 import { HomeResolver } from "./resolvers/HomeResolver";
 import { UserResolver } from "./resolvers/UserResolver";
+import { SubscriptionResolver } from "./resolvers/SubscriptionResolver";
 
 async function main() {
   await createConnection(require("../ormconfig.json"));
 
+  const authChecker: AuthChecker<Context> = (
+    { root, args, context, info },
+    roles
+  ) => {
+    if (context.user) {
+      return true;
+    }
+    return false;
+  };
+
   const schema = await buildSchema({
-    resolvers: [AuthResolver, HomeResolver, UserResolver],
+    resolvers: [AuthResolver, HomeResolver, UserResolver, SubscriptionResolver],
     emitSchemaFile: true,
+    authChecker,
   });
 
   new ApolloServer({

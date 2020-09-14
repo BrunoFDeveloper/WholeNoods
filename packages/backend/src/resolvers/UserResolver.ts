@@ -1,12 +1,56 @@
-import { Ctx, FieldResolver, Resolver, Root } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  FieldResolver,
+  ForbiddenError,
+  ID,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
 import { Post } from "../entities/Post";
-import { User } from "../entities/User";
-import { Context } from "../types";
+import { User, UserType } from "../entities/User";
+import { AuthorizedContext } from "../types";
 
 @Resolver(() => User)
 export class UserResolver {
-  @FieldResolver(() => [Post])
-  posts(@Root() rootUser: User, @Ctx() { user }: Context) {
+  @Authorized()
+  @Query(() => User)
+  user(@Arg("id", () => ID) id: string) {
+    return User.findOneOrFail(id);
+  }
 
+  @Authorized()
+  @FieldResolver(() => Boolean)
+  isCurrentlySubscribed(
+    @Root() rootUser: User,
+    @Ctx() { user }: AuthorizedContext
+  ) {
+    return user.canViewPosts(rootUser);
+  }
+
+  @Authorized()
+  @FieldResolver(() => [Post])
+  async posts(@Root() rootUser: User, @Ctx() { user }: AuthorizedContext) {
+    if (!(await user.canViewPosts(rootUser))) {
+      throw new ForbiddenError();
+    }
+
+    return rootUser.posts;
+  }
+
+  @Authorized()
+  @Mutation(() => User)
+  async convertToCreator(@Ctx() { user }: AuthorizedContext) {
+    if (user.type === UserType.CREATOR) {
+      throw new Error("You are already a content creator");
+    }
+
+    user.type = UserType.CREATOR;
+    await user.save();
+
+    return user;
   }
 }
