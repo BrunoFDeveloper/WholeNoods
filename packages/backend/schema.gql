@@ -7,12 +7,30 @@ type AuthResult {
   jwt: String!
 }
 
+type HomePage {
+  posts: [Post!]!
+}
+
 type Mutation {
   signin(email: String!, password: String!): AuthResult!
   signup(email: String!, name: String!, password: String!): AuthResult!
 }
 
+type Post {
+  assetUrl: String!
+  id: ID!
+  text: String
+  type: PostType!
+}
+
+enum PostType {
+  PHOTO
+  TEXT
+  VIDEO
+}
+
 type Query {
+  home: HomePage!
   viewer: User
 }
 

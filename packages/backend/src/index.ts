@@ -5,19 +5,22 @@ import { AuthResolver } from "./resolvers/AuthResolver";
 import { createConnection } from "typeorm";
 import { User } from "./entities/User";
 import { Context } from "./types";
+import { HomeResolver } from "./resolvers/HomeResolver";
+import { UserResolver } from "./resolvers/UserResolver";
 
 async function main() {
   await createConnection(require("../ormconfig.json"));
 
   const schema = await buildSchema({
-    resolvers: [AuthResolver],
+    resolvers: [AuthResolver, HomeResolver, UserResolver],
     emitSchemaFile: true,
   });
 
   new ApolloServer({
     schema,
-    async context({ req, res }): Promise<Context> {
-      const jwtHeader = req.get("x-wholenoods-token");
+    async context({ req }): Promise<Context> {
+      const [, jwtHeader] = req.get("authorization")?.split("Bearer ") ?? [];
+
       if (jwtHeader) {
         return {
           user: await User.fromJWT(jwtHeader),

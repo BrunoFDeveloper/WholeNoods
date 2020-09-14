@@ -1,3 +1,4 @@
+import { gql, useQuery } from "@apollo/client";
 import React from "react";
 import Header from "./Header";
 
@@ -6,6 +7,14 @@ type Props = {
 };
 
 export default function Layout({ children }: Props) {
+  useQuery(gql`
+    query {
+      viewer {
+        id
+      }
+    }
+  `);
+
   return (
     <div className="container mx-auto">
       <Header />

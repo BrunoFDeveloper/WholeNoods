@@ -1,12 +1,6 @@
 import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom";
-import Layout from "./components/Layout";
-import Login from "./components/Login";
+import App from "./App";
 
-ReactDOM.render(
-  <Layout>
-    <Login />
-  </Layout>,
-  document.getElementById("root")!
-);
+ReactDOM.render(<App />, document.getElementById("root")!);
