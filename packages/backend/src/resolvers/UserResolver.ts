@@ -13,6 +13,7 @@ import {
 import { Post } from "../entities/Post";
 import { User, UserType } from "../entities/User";
 import { AuthorizedContext } from "../types";
+import CurrentUserOnly from "../utils/CurrentUserOnly";
 
 @Resolver(() => User)
 export class UserResolver {
@@ -29,6 +30,13 @@ export class UserResolver {
     @Ctx() { user }: AuthorizedContext
   ) {
     return user.canViewPosts(rootUser);
+  }
+
+  @Authorized()
+  @CurrentUserOnly()
+  @FieldResolver(() => String)
+  legalName(@Root() user: User) {
+    return user.legalName;
   }
 
   @Authorized()

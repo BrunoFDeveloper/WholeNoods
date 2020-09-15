@@ -7,18 +7,23 @@ import {
   PrimaryGeneratedColumn,
   RelationCount,
 } from "typeorm";
+import { authenticator } from "otplib";
 import SecurePassword from "secure-password";
 import { Post } from "./Post";
-import { Lazy } from "../types";
-import jwt from "jsonwebtoken";
+import { Lazy, Session } from "../types";
 import { Subscription } from "./Subscription";
 
-const pwd = new SecurePassword();
-const JWT_SECRET = "something-here-dont-leak-it";
+const securePassword = new SecurePassword();
 
 export enum UserType {
   VIEWER,
   CREATOR,
+}
+
+export enum AuthType {
+  FULL = "FULL",
+  TOTP = "TOTP",
+  PASSWORD_RESET = "PASSWORD_RESET",
 }
 
 registerEnumType(UserType, {
@@ -28,14 +33,33 @@ registerEnumType(UserType, {
 @Entity()
 @ObjectType()
 export class User extends BaseEntity {
-  static fromJWT(token: string) {
-    const data = jwt.verify(token, JWT_SECRET) as any;
-
-    if (data) {
-      return this.findOne(data.id);
+  static async fromSession(
+    session: Session | null,
+    allowedType: AuthType = AuthType.FULL
+  ): Promise<User | undefined> {
+    if (session && session.userID && session.type === allowedType) {
+      return await this.findOne(session.userID);
     }
 
-    return null;
+    return;
+  }
+
+  static async fromTOTPSession(session: Session, token: string): Promise<User> {
+    if (!session.userID || session.type !== AuthType.TOTP) {
+      throw new Error("No TOTP session currently exists.");
+    }
+
+    const user = await this.findOne(session.userID);
+    if (!user || !user.totpSecret) {
+      throw new Error("No user was found in the current session.");
+    }
+
+    const isValid = authenticator.verify({ secret: user.totpSecret, token });
+    if (!isValid) {
+      throw new Error("The TOTP token provided was not valid.");
+    }
+
+    return user;
   }
 
   @Field(() => ID)
@@ -46,8 +70,6 @@ export class User extends BaseEntity {
   @Column({ unique: true, collation: "nocase" })
   email!: string;
 
-  // TODO: Only allow this on current user:
-  @Field()
   @Column()
   legalName!: string;
 
@@ -65,6 +87,14 @@ export class User extends BaseEntity {
 
   @Column({ type: "blob" })
   passwordHash!: Buffer;
+
+  // TODO: Encrypt this somehow?
+  @Column("varchar", { nullable: true })
+  totpSecret?: string | null;
+
+  generateTotpSecret() {
+    return authenticator.generateSecret();
+  }
 
   @OneToMany(() => Post, (post) => post.user, { lazy: true })
   posts!: Lazy<Post[]>;
@@ -88,11 +118,32 @@ export class User extends BaseEntity {
   subscriptions!: Lazy<Subscription[]>;
 
   async setPassword(password: string) {
-    this.passwordHash = await pwd.hash(Buffer.from(password));
+    this.passwordHash = await securePassword.hash(Buffer.from(password));
   }
 
   async verifyPassword(password: string) {
-    return await pwd.verify(Buffer.from(password), this.passwordHash);
+    const result = await securePassword.verify(
+      Buffer.from(password),
+      this.passwordHash
+    );
+
+    // The hash params used for the stored hash have since changed, so we should re-hash the password
+    // to ensure that it is as secure as possible:
+    if (result === SecurePassword.VALID_NEEDS_REHASH) {
+      await this.setPassword(password);
+      await this.save();
+    }
+
+    return [SecurePassword.VALID, SecurePassword.VALID_NEEDS_REHASH].includes(
+      result
+    );
+  }
+
+  async signIn(session: Session, type: AuthType = AuthType.FULL) {
+    session.userID = this.id;
+    session.type = type;
+
+    console.log(session);
   }
 
   async canViewPosts(otherUser: User) {
@@ -106,15 +157,5 @@ export class User extends BaseEntity {
     });
 
     return !!subscription;
-  }
-
-  jwt() {
-    return jwt.sign(
-      {
-        id: this.id,
-      },
-      JWT_SECRET,
-      { expiresIn: "1h" }
-    );
   }
 }

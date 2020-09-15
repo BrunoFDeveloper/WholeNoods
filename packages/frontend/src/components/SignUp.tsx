@@ -15,8 +15,8 @@ export default function SignUp() {
       $email: String!
       $password: String!
     ) {
-      signup(name: $name, email: $email, password: $password) {
-        jwt
+      signUp(name: $name, email: $email, password: $password) {
+        ok
       }
     }
   `);

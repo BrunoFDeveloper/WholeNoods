@@ -1,14 +1,18 @@
 import "reflect-metadata";
+import express from "express";
+import bodyParser from "body-parser";
+import cookieSession from "cookie-session";
+import { ApolloServer } from "apollo-server-express";
 import { AuthChecker, buildSchema } from "type-graphql";
-import { ApolloServer } from "apollo-server";
 import { AuthResolver } from "./resolvers/AuthResolver";
 import { createConnection } from "typeorm";
 import { User } from "./entities/User";
-import { Subscription } from "./entities/Subscription";
-import { Context } from "./types";
+import { Context, Session } from "./types";
 import { HomeResolver } from "./resolvers/HomeResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 import { SubscriptionResolver } from "./resolvers/SubscriptionResolver";
+
+const COOKIE_SECRET = "replace-before-prod";
 
 async function main() {
   await createConnection(require("../ormconfig.json"));
@@ -29,20 +33,30 @@ async function main() {
     authChecker,
   });
 
-  new ApolloServer({
+  const app = express();
+
+  app.use(bodyParser.json());
+  app.use(
+    cookieSession({
+      name: "wholenoods.cookie",
+      keys: [COOKIE_SECRET],
+    })
+  );
+
+  const server = new ApolloServer({
     schema,
     async context({ req }): Promise<Context> {
-      const [, jwtHeader] = req.get("authorization")?.split("Bearer ") ?? [];
-
-      if (jwtHeader) {
-        return {
-          user: await User.fromJWT(jwtHeader),
-        };
-      }
-
-      return {};
+      console.log(req.session);
+      return {
+        req,
+        user: await User.fromSession(req.session as Session),
+      };
     },
-  }).listen(4000, () => {
+  });
+
+  server.applyMiddleware({ app });
+
+  app.listen(4000, () => {
     console.log("Apollo server running on port 4000.");
   });
 }

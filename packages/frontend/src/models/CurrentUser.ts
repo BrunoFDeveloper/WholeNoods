@@ -2,7 +2,7 @@ import { types } from "mobx-state-tree";
 
 const JWT_STORE_KEY = "do-not-do-this-use-cookies-instead";
 
-export const User = types
+export const CurrentUser = types
   .model({
     jwt: localStorage.getItem(JWT_STORE_KEY) ?? "",
   })

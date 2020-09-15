@@ -1,5 +1,3 @@
-import { AuthenticationError } from "apollo-server";
-import SecurePassword from "secure-password";
 import {
   Arg,
   Ctx,
@@ -9,12 +7,18 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { User } from "../entities/User";
+import { AuthType, User } from "../entities/User";
 import { Context } from "../types";
+import Result from "./types/Result";
 
 @ObjectType()
-class AuthResult {
-  @Field() jwt!: string;
+class SignInResult extends Result {
+  @Field() requiresTOTP: boolean;
+
+  constructor(requiresTOTP: boolean) {
+    super();
+    this.requiresTOTP = requiresTOTP;
+  }
 }
 
 @Resolver()
@@ -24,8 +28,9 @@ export class AuthResolver {
     return user;
   }
 
-  @Mutation(() => AuthResult)
-  async signup(
+  @Mutation(() => Result)
+  async signUp(
+    @Ctx() { req }: Context,
     @Arg("name") name: string,
     @Arg("email") email: string,
     @Arg("password") password: string
@@ -39,28 +44,37 @@ export class AuthResolver {
     await user.setPassword(password);
     await user.save();
 
-    return {
-      jwt: user.jwt(),
-    };
+    user.signIn(req.session);
+
+    return new Result();
   }
 
-  @Mutation(() => AuthResult)
-  async signin(@Arg("email") email: string, @Arg("password") password: string) {
-    const user = await User.findOne({
+  @Mutation(() => SignInResult)
+  async signIn(
+    @Ctx() { req }: Context,
+    @Arg("email") email: string,
+    @Arg("password") password: string
+  ) {
+    const user = await User.findOneOrFail({
       where: {
         email,
       },
     });
 
-    if (
-      user &&
-      (await user?.verifyPassword(password)) === SecurePassword.VALID
-    ) {
-      return {
-        jwt: user.jwt(),
-      };
+    const passwordValid = await user.verifyPassword(password);
+
+    if (!passwordValid) {
+      throw new Error("Invalid password.");
     }
 
-    throw new AuthenticationError("Invalid email or password");
+    if (user.totpSecret) {
+      await user.signIn(req.session, AuthType.TOTP);
+
+      return new SignInResult(true);
+    }
+
+    await user.signIn(req.session);
+
+    return new SignInResult(false);
   }
 }

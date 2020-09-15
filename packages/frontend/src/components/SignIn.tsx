@@ -10,8 +10,8 @@ export default function SignIn() {
   const history = useHistory();
   const [mutate] = useMutation(gql`
     mutation SignInMutation($email: String!, $password: String!) {
-      signin(email: $email, password: $password) {
-        jwt
+      signIn(email: $email, password: $password) {
+        requiresTOTP
       }
     }
   `);

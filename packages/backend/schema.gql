@@ -3,18 +3,14 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-type AuthResult {
-  jwt: String!
-}
-
 type HomePage {
   posts: [Post!]!
 }
 
 type Mutation {
   convertToCreator: User!
-  signin(email: String!, password: String!): AuthResult!
-  signup(email: String!, name: String!, password: String!): AuthResult!
+  signIn(email: String!, password: String!): SignInResult!
+  signUp(email: String!, name: String!, password: String!): Result!
   subscribe(user: ID!): User!
 }
 
@@ -35,6 +31,15 @@ type Query {
   home: HomePage!
   user(id: ID!): User!
   viewer: User
+}
+
+type Result {
+  ok: Boolean!
+}
+
+type SignInResult {
+  ok: Boolean!
+  requiresTOTP: Boolean!
 }
 
 type User {

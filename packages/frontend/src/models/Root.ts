@@ -1,6 +1,6 @@
 import { types } from "mobx-state-tree";
-import { User } from "./User";
+import { CurrentUser } from "./CurrentUser";
 
 export const RootModel = types.model({
-  user: User,
+  currentUser: CurrentUser,
 });
