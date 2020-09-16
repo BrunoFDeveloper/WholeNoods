@@ -9,16 +9,6 @@ import {
 import { Lazy } from "../types";
 import { User } from "./User";
 
-enum PostType {
-  TEXT,
-  PHOTO,
-  VIDEO,
-}
-
-registerEnumType(PostType, {
-  name: "PostType",
-});
-
 @ObjectType()
 @Entity()
 export class Post extends BaseEntity {
@@ -26,17 +16,13 @@ export class Post extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field(() => PostType)
-  @Column()
-  type!: PostType;
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  title?: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
   text?: string;
-
-  @Field()
-  @Column()
-  assetUrl!: string;
 
   @ManyToOne(() => User, (user) => user.posts, { lazy: true })
   user!: Lazy<User>;

@@ -11,6 +11,7 @@ import { Context, Session } from "./types";
 import { HomeResolver } from "./resolvers/HomeResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 import { SubscriptionResolver } from "./resolvers/SubscriptionResolver";
+import { PostsResolver } from "./resolvers/PostsResolver";
 
 const COOKIE_SECRET = "replace-before-prod";
 
@@ -28,7 +29,13 @@ async function main() {
   };
 
   const schema = await buildSchema({
-    resolvers: [AuthResolver, HomeResolver, UserResolver, SubscriptionResolver],
+    resolvers: [
+      AuthResolver,
+      HomeResolver,
+      UserResolver,
+      SubscriptionResolver,
+      PostsResolver,
+    ],
     emitSchemaFile: true,
     authChecker,
   });
@@ -54,7 +61,13 @@ async function main() {
     },
   });
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({
+    app,
+    cors: {
+      origin: true,
+      credentials: true,
+    },
+  });
 
   app.listen(4000, () => {
     console.log("Apollo server running on port 4000.");

@@ -16,7 +16,7 @@ export default function Layout({ children }: Props) {
   `);
 
   return (
-    <div className="container mx-auto">
+    <div>
       <Header />
       {children}
     </div>

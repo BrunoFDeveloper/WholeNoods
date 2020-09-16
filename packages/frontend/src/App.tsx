@@ -2,6 +2,8 @@ import { ApolloProvider } from "@apollo/client";
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import client from "./client";
+import ComposePost from "./components/ComposePost";
+import Home from "./components/Home";
 import Layout from "./components/Layout";
 import Profile from "./components/Profile";
 import SignIn from "./components/SignIn";
@@ -16,7 +18,7 @@ export default function App() {
           <Layout>
             <Switch>
               <Route path="/" exact>
-                nothing
+                <Home />
               </Route>
               <Route path="/signin">
                 <SignIn />
@@ -26,6 +28,9 @@ export default function App() {
               </Route>
               <Route path="/profile/:id">
                 <Profile />
+              </Route>
+              <Route path="/posts/create">
+                <ComposePost />
               </Route>
             </Switch>
           </Layout>

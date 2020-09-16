@@ -3,7 +3,7 @@ import { Instance } from "mobx-state-tree";
 import { RootModel } from "./Root";
 
 export const rootStore = RootModel.create({
-  user: {},
+  currentUser: {},
 });
 
 export type RootInstance = Instance<typeof RootModel>;

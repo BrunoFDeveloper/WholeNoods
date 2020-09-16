@@ -3,28 +3,27 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input CreatePostInput {
+  text: String!
+  title: String!
+}
+
 type HomePage {
   posts: [Post!]!
 }
 
 type Mutation {
   convertToCreator: User!
+  createPost(input: CreatePostInput!): Post!
   signIn(email: String!, password: String!): SignInResult!
   signUp(email: String!, name: String!, password: String!): Result!
   subscribe(user: ID!): User!
 }
 
 type Post {
-  assetUrl: String!
   id: ID!
   text: String
-  type: PostType!
-}
-
-enum PostType {
-  PHOTO
-  TEXT
-  VIDEO
+  title: String
 }
 
 type Query {

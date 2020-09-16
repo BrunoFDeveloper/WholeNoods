@@ -7,7 +7,7 @@ type Props = {
 export default function Button({ children, ...props }: Props) {
   return (
     <button
-      className="text-green-700 bg-transparent hover:bg-white transition duration-150 border border-green-700 rounded-sm focus:outline-none px-5 py-2 text-lg font-semibold"
+      className="text-white bg-green-600 bg-transparent transition duration-150 rounded focus:outline-none px-5 py-2 text-lg font-semibold"
       {...props}
     >
       {children}
