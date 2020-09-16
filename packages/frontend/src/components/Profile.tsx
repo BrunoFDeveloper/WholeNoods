@@ -27,6 +27,11 @@ export default function Profile() {
           postsCount
           subscribersCount
           isCurrentlySubscribed
+          posts {
+            id
+            title
+            text
+          }
         }
       }
     `,
@@ -83,9 +88,9 @@ export default function Profile() {
               {data.user.bio || "No user bio found."}
             </div>
             <div className="space-y-6 mt-4">
-              <Post />
-              <Post />
-              <Post />
+              {data.user.posts.map(({ title, text }: any) => (
+                <Post title={title} text={text} />
+              ))}
             </div>
           </div>
           <div className="bg-white -mt-16 shadow-lg p-6 w-80 rounded space-y-4 h-full">
