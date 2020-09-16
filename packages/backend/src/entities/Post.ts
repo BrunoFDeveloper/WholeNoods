@@ -9,6 +9,15 @@ import {
 import { Lazy } from "../types";
 import { User } from "./User";
 
+// Post media (multiple images / videos)
+// Remove rich text because I think its too much for now. (remove draftjs)
+// Add likes
+// Add comments
+// Build a timeline
+// Add dates (created / updated)
+// Add a pinned post
+// Add post visibility (public, previewed, private)
+
 @ObjectType()
 @Entity()
 export class Post extends BaseEntity {
