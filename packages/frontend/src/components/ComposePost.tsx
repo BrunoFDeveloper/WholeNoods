@@ -1,23 +1,12 @@
 import React, { useRef, useState } from "react";
-import Editor from "draft-js-plugins-editor";
-import { EditorState } from "draft-js";
-import createToolbarPlugin from "draft-js-static-toolbar-plugin";
-import "draft-js/dist/Draft.css";
-import "draft-js-static-toolbar-plugin/lib/plugin.css";
 import Header from "./shared/Header";
 import Button from "./shared/Button";
 import { gql, useMutation } from "@apollo/client";
-import { stateToMarkdown } from "draft-js-export-markdown";
-
-const toolbarPlugin = createToolbarPlugin();
-const { Toolbar } = toolbarPlugin;
+import Toggle from "./shared/Toggle";
 
 export default function ComposePost() {
-  const editorRef = useRef<Editor | null>(null);
-  const [title, setTitle] = useState("");
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
+  const [isPublic, setIsPublic] = useState(true);
+  const [isPreview, setIsPreview] = useState(false);
 
   const [commit] = useMutation(gql`
     mutation ComposePostMutation($input: CreatePostInput!) {
@@ -27,16 +16,21 @@ export default function ComposePost() {
     }
   `);
 
-  function handleClick() {
-    editorRef.current?.focus();
-  }
+  function createPost(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
 
-  function createPost() {
+    const formData = new FormData(e.currentTarget);
+
     commit({
       variables: {
         input: {
-          title,
-          text: stateToMarkdown(editorState.getCurrentContent()),
+          title: formData.get("title"),
+          text: formData.get("text"),
+          visibility: isPublic
+            ? "PUBLIC"
+            : isPreview
+            ? "PRIVATE_PREVIEW"
+            : "PRIVATE",
         },
       },
     });
@@ -44,31 +38,54 @@ export default function ComposePost() {
 
   return (
     <div className="container mx-auto mt-6">
-      <Header>New Post.</Header>
+      <div className="max-w-lg mx-auto bg-gray-200 p-8 rounded">
+        <form onSubmit={createPost} className="flex flex-col space-y-4">
+          <Header>New Post</Header>
 
-      <input
-        placeholder="Post Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+          <label className="block text-sm font-medium leading-5 text-gray-700">
+            Post Title
+            <div className="mt-1 relative rounded-md shadow-sm">
+              <input
+                name="title"
+                className="form-input block w-full sm:text-sm sm:leading-5"
+                placeholder="Title..."
+              />
+            </div>
+          </label>
 
-      <div
-        className="border border-gray-200 rounded shadow p-4 mt-4"
-        onClick={handleClick}
-      >
-        <div style={{ minHeight: 140 }}>
-          <Editor
-            editorState={editorState}
-            onChange={setEditorState}
-            plugins={[toolbarPlugin]}
-            ref={editorRef}
-          />
-        </div>
-        <Toolbar />
-      </div>
+          <label className="block text-sm font-medium leading-5 text-gray-700">
+            Post Text
+            <div className="mt-1 relative rounded-md shadow-sm">
+              <textarea
+                name="text"
+                rows={3}
+                className="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+              />
+            </div>
+          </label>
 
-      <div className="mt-4 flex justify-end">
-        <Button onClick={createPost}>Create Post</Button>
+          <label className="text-sm font-medium leading-5 text-gray-700 flex items-center justify-between">
+            Public Post
+            <Toggle
+              checked={isPublic}
+              onChange={() => setIsPublic(!isPublic)}
+            />
+          </label>
+
+          {!isPublic && (
+            <label className="text-sm font-medium leading-5 text-gray-700 flex items-center justify-between">
+              Preview Post For Public
+              <Toggle
+                checked={isPreview}
+                onChange={() => setIsPreview(!isPreview)}
+              />
+            </label>
+          )}
+
+          <div className="mt-4 flex justify-end">
+            <Button type="submit">Create Post</Button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -6,6 +6,16 @@
 input CreatePostInput {
   text: String!
   title: String!
+  visibility: PostVisibility!
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+input FavoritePostInput {
+  id: ID!
 }
 
 type HomePage {
@@ -15,15 +25,32 @@ type HomePage {
 type Mutation {
   convertToCreator: User!
   createPost(input: CreatePostInput!): Post!
+  favoritePost(input: FavoritePostInput!): Post!
+  pinPost(input: PinPostInput!): Post!
   signIn(email: String!, password: String!): SignInResult!
   signUp(email: String!, name: String!, password: String!): Result!
   subscribe(user: ID!): User!
 }
 
-type Post {
+input PinPostInput {
   id: ID!
-  text: String
+}
+
+type Post {
+  createdAt: DateTime!
+  favoritesCount: Int!
+  id: ID!
+  text: String!
   title: String
+  updatedAt: DateTime!
+  user: User!
+  visibility: PostVisibility!
+}
+
+enum PostVisibility {
+  PRIVATE
+  PRIVATE_PREVIEW
+  PUBLIC
 }
 
 type Query {
@@ -43,15 +70,18 @@ type SignInResult {
 
 type User {
   bio: String
+  createdAt: DateTime!
   displayName: String!
   email: String!
   id: ID!
   isCurrentlySubscribed: Boolean!
   legalName: String!
+  pinnedPost: Post
   posts: [Post!]!
   postsCount: Int!
   subscribersCount: Int!
   type: UserType!
+  updatedAt: DateTime!
 }
 
 enum UserType {

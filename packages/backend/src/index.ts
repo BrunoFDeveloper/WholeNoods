@@ -11,7 +11,7 @@ import { Context, Session } from "./types";
 import { HomeResolver } from "./resolvers/HomeResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 import { SubscriptionResolver } from "./resolvers/SubscriptionResolver";
-import { PostsResolver } from "./resolvers/PostsResolver";
+import { PostResolver } from "./resolvers/PostResolver";
 
 const COOKIE_SECRET = "replace-before-prod";
 
@@ -34,7 +34,7 @@ async function main() {
       HomeResolver,
       UserResolver,
       SubscriptionResolver,
-      PostsResolver,
+      PostResolver,
     ],
     emitSchemaFile: true,
     authChecker,
@@ -53,7 +53,6 @@ async function main() {
   const server = new ApolloServer({
     schema,
     async context({ req }): Promise<Context> {
-      console.log(req.session);
       return {
         req,
         user: await User.fromSession(req.session as Session),

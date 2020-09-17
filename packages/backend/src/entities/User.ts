@@ -1,17 +1,18 @@
-import { Field, ID, Int, ObjectType, registerEnumType } from "type-graphql";
+import { Field, Int, ObjectType, registerEnumType } from "type-graphql";
 import {
-  BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
-  PrimaryGeneratedColumn,
-  RelationCount,
+  OneToOne,
 } from "typeorm";
 import { authenticator } from "otplib";
 import SecurePassword from "secure-password";
 import { Post } from "./Post";
 import { Lazy, Session } from "../types";
 import { Subscription } from "./Subscription";
+import { ExternalEntity } from "./BaseEntity";
+import { Favorite } from "./Favorite";
 
 const securePassword = new SecurePassword();
 
@@ -32,7 +33,7 @@ registerEnumType(UserType, {
 
 @Entity()
 @ObjectType()
-export class User extends BaseEntity {
+export class User extends ExternalEntity {
   static async fromSession(
     session: Session | null,
     allowedType: AuthType = AuthType.FULL
@@ -61,10 +62,6 @@ export class User extends BaseEntity {
 
     return user;
   }
-
-  @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id!: number;
 
   @Field()
   @Column({ unique: true, collation: "nocase" })
@@ -96,21 +93,35 @@ export class User extends BaseEntity {
     return authenticator.generateSecret();
   }
 
+  @OneToMany(() => Favorite, (favorite) => favorite.user, { lazy: true })
+  favorites!: Lazy<Favorite[]>;
+
   @OneToMany(() => Post, (post) => post.user, { lazy: true })
   posts!: Lazy<Post[]>;
+
+  @Field(() => Post, { nullable: true })
+  @JoinColumn()
+  @OneToOne(() => Post, { nullable: true, lazy: true })
+  pinnedPost?: Lazy<Post>;
 
   @OneToMany(() => Subscription, (subscription) => subscription.toUser, {
     lazy: true,
   })
   subscribers!: Lazy<Subscription[]>;
 
-  @Field(() => Int)
-  @RelationCount("posts")
-  postsCount!: number;
+  getSubscribersCount() {
+    return Subscription.count({
+      where: { toUser: this }
+    })
+  }
 
-  @Field(() => Int)
-  @RelationCount("subscribers")
-  subscribersCount!: number;
+  getPostsCount() {
+    return Post.count({
+      where: {
+        user: this,
+      },
+    });
+  }
 
   @OneToMany(() => Subscription, (subscription) => subscription.fromUser, {
     lazy: true,
@@ -142,8 +153,6 @@ export class User extends BaseEntity {
   async signIn(session: Session, type: AuthType = AuthType.FULL) {
     session.userID = this.id;
     session.type = type;
-
-    console.log(session);
   }
 
   async canViewPosts(otherUser: User) {

@@ -27,10 +27,17 @@ export default function Profile() {
           postsCount
           subscribersCount
           isCurrentlySubscribed
+          pinnedPost {
+            id
+            title
+            text
+            visibility
+          }
           posts {
             id
             title
             text
+            visibility
           }
         }
       }
@@ -88,8 +95,11 @@ export default function Profile() {
               {data.user.bio || "No user bio found."}
             </div>
             <div className="space-y-6 mt-4">
-              {data.user.posts.map(({ title, text }: any) => (
-                <Post title={title} text={text} />
+              {data.user.pinnedPost && (
+                <Post post={data.user.pinnedPost} user={data.user} />
+              )}
+              {data.user.posts.map((post: any) => (
+                <Post user={data.user} post={post} />
               ))}
             </div>
           </div>

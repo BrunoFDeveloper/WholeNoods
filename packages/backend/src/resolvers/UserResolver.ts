@@ -5,6 +5,7 @@ import {
   FieldResolver,
   ForbiddenError,
   ID,
+  Int,
   Mutation,
   Query,
   Resolver,
@@ -43,10 +44,20 @@ export class UserResolver {
   @FieldResolver(() => [Post])
   async posts(@Root() rootUser: User, @Ctx() { user }: AuthorizedContext) {
     if (!(await user.canViewPosts(rootUser))) {
-      throw new ForbiddenError();
+      return [];
     }
 
     return rootUser.posts;
+  }
+
+  @FieldResolver(() => Int)
+  postsCount(@Root() user: User) {
+    return user.getPostsCount();
+  }
+
+  @FieldResolver(() => Int)
+  subscribersCount(@Root() user: User) {
+    return user.getSubscribersCount();
   }
 
   @Authorized()
