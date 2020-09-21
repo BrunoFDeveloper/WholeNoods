@@ -13,6 +13,7 @@ import {
 } from "type-graphql";
 import { Favorite } from "../entities/Favorite";
 import { Post, PostVisibility } from "../entities/Post";
+import { PostMedia, PostMediaType } from "../entities/PostMedia";
 import { AuthorizedContext } from "../types";
 
 @InputType()
@@ -45,12 +46,23 @@ export class PostResolver {
   ) {
     const post = await Post.findOneOrFail(input.id);
 
-    const favorite = Favorite.create({
-      user,
-      post,
+    const existingFavorite = await Favorite.findOne({
+      where: {
+        user,
+        post,
+      },
     });
 
-    await favorite.save();
+    if (existingFavorite) {
+      await Favorite.remove(existingFavorite);
+    } else {
+      const favorite = Favorite.create({
+        user,
+        post,
+      });
+
+      await favorite.save();
+    }
 
     return post;
   }
@@ -87,11 +99,28 @@ export class PostResolver {
       user,
     });
 
-    return await post.save();
+    await post.save();
+
+    const postMedia = PostMedia.create({
+      post,
+      url:
+        "https://cultureatz.com/wp-content/uploads/2009/10/hot_food_laid_d.jpg",
+      type: PostMediaType.PHOTO,
+    });
+
+    await postMedia.save();
+
+    return post;
   }
 
   @FieldResolver(() => Int)
-  favoritesCount(@Root() post: Post) {
+  async favoritesCount(@Root() post: Post) {
     return post.getFavoritesCount();
+  }
+
+  @Authorized()
+  @FieldResolver(() => Boolean)
+  hasFavorited(@Root() post: Post, @Ctx() { user }: AuthorizedContext) {
+    return post.hasFavorited(user);
   }
 }

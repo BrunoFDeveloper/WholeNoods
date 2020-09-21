@@ -26,7 +26,7 @@ export default function App() {
               <Route path="/signup">
                 <SignUp />
               </Route>
-              <Route path="/profile/:id">
+              <Route path="/profiles/:id">
                 <Profile />
               </Route>
               <Route path="/posts/create">

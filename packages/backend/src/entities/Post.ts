@@ -41,10 +41,25 @@ export class Post extends ExternalEntity {
   @OneToMany(() => Favorite, (favorite) => favorite.post, { lazy: true })
   favorites!: Lazy<Favorite[]>;
 
-  @OneToMany(() => PostMedia, (media) => media.post, { lazy: true })
+  @Field(() => [PostMedia])
+  @OneToMany(() => PostMedia, (media) => media.post, {
+    lazy: true,
+    cascade: true,
+  })
   media!: Lazy<PostMedia[]>;
 
   getFavoritesCount() {
     return Favorite.count({ where: { post: this } });
+  }
+
+  async hasFavorited(user: User) {
+    const fav = await Favorite.findOne({
+      where: {
+        post: this,
+        user,
+      },
+    });
+
+    return !!fav;
   }
 }

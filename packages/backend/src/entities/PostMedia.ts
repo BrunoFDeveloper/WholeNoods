@@ -4,7 +4,7 @@ import { Lazy } from "../types";
 import { ExternalEntity } from "./BaseEntity";
 import { Post } from "./Post";
 
-enum PostMediaType {
+export enum PostMediaType {
   PHOTO,
   VIDEO,
 }

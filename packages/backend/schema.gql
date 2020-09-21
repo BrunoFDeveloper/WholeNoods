@@ -39,12 +39,22 @@ input PinPostInput {
 type Post {
   createdAt: DateTime!
   favoritesCount: Int!
+  hasFavorited: Boolean!
   id: ID!
+  media: [PostMedia!]!
   text: String!
   title: String
   updatedAt: DateTime!
   user: User!
   visibility: PostVisibility!
+}
+
+type PostMedia {
+  createdAt: DateTime!
+  id: ID!
+  type: Float!
+  updatedAt: DateTime!
+  url: String!
 }
 
 enum PostVisibility {

@@ -2,9 +2,7 @@ import React, { useContext, createContext } from "react";
 import { Instance } from "mobx-state-tree";
 import { RootModel } from "./Root";
 
-export const rootStore = RootModel.create({
-  currentUser: {},
-});
+export const rootStore = RootModel.create({});
 
 export type RootInstance = Instance<typeof RootModel>;
 const RootStoreContext = createContext<null | RootInstance>(null);

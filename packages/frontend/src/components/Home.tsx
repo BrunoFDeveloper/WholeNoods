@@ -1,16 +1,13 @@
 import { gql, useQuery } from "@apollo/client";
 import React from "react";
-import Post from "./shared/Post";
+import Post, { PostFragment } from "./shared/Post";
 
 export default function Home() {
   const { data, loading } = useQuery(gql`
     query HomeQuery {
       home {
         posts {
-          id
-          title
-          text
-          visibility
+          ...PostFragment_post
           user {
             id
             displayName
@@ -18,6 +15,7 @@ export default function Home() {
         }
       }
     }
+    ${PostFragment}
   `);
 
   if (loading) {

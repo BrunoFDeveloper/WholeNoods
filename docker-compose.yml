@@ -1,0 +1,76 @@
+version: "3"
+
+services:
+  reverse-proxy:
+    image: traefik:v2.2
+    command: --api.insecure=true --providers.docker
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  postgres:
+    container_name: "noods-postgres"
+    image: "postgres:11"
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - "pgdata:/var/lib/postgresql/data/"
+    environment:
+      POSTGRES_PASSWORD: noods
+
+  redis:
+    container_name: "noods-redis"
+    image: "redis"
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - "redisdata:/data"
+
+  backend:
+    image: node:13
+    command: yarn workspace @noods/backend start
+    ports:
+      - "127.0.0.1:4000:4000"
+    volumes:
+      - .:/srv/backend:rw
+    working_dir: /srv/backend
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - postgres
+    labels:
+      - "traefik.http.routers.backend.rule=Host(`wholenoods.localhost`) && PathPrefix(`/api`)"
+
+  seed_database:
+    image: node:13
+    command: yarn workspace @noods/backend seed
+    volumes:
+      - .:/srv/backend:rw
+    env_file:
+      - .env
+    working_dir: /srv/backend
+    depends_on:
+      - backend
+
+  frontend:
+    image: node:13
+    command: yarn workspace @noods/frontend start
+    ports:
+      - "127.0.0.1:1234:1234"
+      - "127.0.0.1:4321:4321"
+    volumes:
+      - .:/srv/frontend:rw
+    working_dir: /srv/frontend
+    depends_on:
+      - backend
+    labels:
+      - "traefik.http.routers.frontend.rule=Host(`wholenoods.localhost`)"
+
+volumes:
+  pgdata: {}
+  redisdata: {}

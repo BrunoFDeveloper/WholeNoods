@@ -27,7 +27,7 @@ export default function SignIn() {
       },
     });
 
-    store.user.setJWT(data.signin.jwt);
+    store.user.setIsSignedIn(true);
 
     history.push("/");
   }

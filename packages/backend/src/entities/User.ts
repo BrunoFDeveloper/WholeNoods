@@ -1,11 +1,5 @@
 import { Field, Int, ObjectType, registerEnumType } from "type-graphql";
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-} from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { authenticator } from "otplib";
 import SecurePassword from "secure-password";
 import { Post } from "./Post";
@@ -64,7 +58,7 @@ export class User extends ExternalEntity {
   }
 
   @Field()
-  @Column({ unique: true, collation: "nocase" })
+  @Column({ type: "citext", unique: true })
   email!: string;
 
   @Column()
@@ -82,7 +76,7 @@ export class User extends ExternalEntity {
   @Column({ default: UserType.VIEWER })
   type!: UserType;
 
-  @Column({ type: "blob" })
+  @Column({ type: "bytea" })
   passwordHash!: Buffer;
 
   // TODO: Encrypt this somehow?
@@ -111,8 +105,8 @@ export class User extends ExternalEntity {
 
   getSubscribersCount() {
     return Subscription.count({
-      where: { toUser: this }
-    })
+      where: { toUser: this },
+    });
   }
 
   getPostsCount() {

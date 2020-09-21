@@ -1,14 +1,11 @@
 import { types } from "mobx-state-tree";
 
-const JWT_STORE_KEY = "do-not-do-this-use-cookies-instead";
-
 export const CurrentUser = types
   .model({
-    jwt: localStorage.getItem(JWT_STORE_KEY) ?? "",
+    isSignedIn: false,
   })
   .actions((self) => ({
-    setJWT(jwt: string) {
-      self.jwt = jwt;
-      localStorage.setItem(JWT_STORE_KEY, jwt);
+    setIsSignedIn(isSignedIn: boolean) {
+      self.isSignedIn = isSignedIn;
     },
   }));

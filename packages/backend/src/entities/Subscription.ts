@@ -15,7 +15,7 @@ export class Subscription extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @CreateDateColumn({ type: "datetime" })
+  @CreateDateColumn()
   createdAt!: Date;
 
   @ManyToOne(() => User, (user) => user.subscriptions)

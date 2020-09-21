@@ -3,10 +3,12 @@ import Header from "./shared/Header";
 import Button from "./shared/Button";
 import { gql, useMutation } from "@apollo/client";
 import Toggle from "./shared/Toggle";
+import { useHistory } from "react-router-dom";
 
 export default function ComposePost() {
-  const [isPublic, setIsPublic] = useState(true);
-  const [isPreview, setIsPreview] = useState(false);
+  const history = useHistory();
+  const [isPublic, setIsPublic] = useState(false);
+  const [isPreview, setIsPreview] = useState(true);
 
   const [commit] = useMutation(gql`
     mutation ComposePostMutation($input: CreatePostInput!) {
@@ -16,12 +18,12 @@ export default function ComposePost() {
     }
   `);
 
-  function createPost(e: React.FormEvent<HTMLFormElement>) {
+  async function createPost(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
 
-    commit({
+    const { data } = await commit({
       variables: {
         input: {
           title: formData.get("title"),
@@ -34,6 +36,8 @@ export default function ComposePost() {
         },
       },
     });
+
+    history.push(`/posts/${data.createPost.id}`);
   }
 
   return (

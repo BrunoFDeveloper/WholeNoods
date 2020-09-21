@@ -34,7 +34,7 @@ export default function SignUp() {
       },
     });
 
-    store.user.setJWT(data.signup.jwt);
+    store.user.setIsSignedIn(true);
 
     history.push("/");
   }

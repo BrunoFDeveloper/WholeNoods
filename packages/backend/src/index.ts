@@ -16,7 +16,7 @@ import { PostResolver } from "./resolvers/PostResolver";
 const COOKIE_SECRET = "replace-before-prod";
 
 async function main() {
-  await createConnection(require("../ormconfig.json"));
+  await createConnection(require("../ormconfig.js"));
 
   const authChecker: AuthChecker<Context> = (
     { root, args, context, info },
@@ -60,13 +60,25 @@ async function main() {
     },
   });
 
-  server.applyMiddleware({
-    app,
-    cors: {
-      origin: true,
-      credentials: true,
-    },
-  });
+  app.use(
+    server.getMiddleware({
+      path: "/graphql",
+      cors: {
+        origin: true,
+        credentials: true,
+      },
+    })
+  );
+
+  app.use(
+    server.getMiddleware({
+      path: "/api/graphql",
+      cors: {
+        origin: true,
+        credentials: true,
+      },
+    })
+  );
 
   app.listen(4000, () => {
     console.log("Apollo server running on port 4000.");

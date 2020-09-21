@@ -3,7 +3,8 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import Header from "./shared/Header";
 import Button from "./shared/Button";
-import Post from "./shared/Post";
+import Post, { PostFragment } from "./shared/Post";
+import PostGrid from "./shared/PostGrid";
 
 function Stat({ count, label }: { count: number; label: string }) {
   return (
@@ -34,13 +35,11 @@ export default function Profile() {
             visibility
           }
           posts {
-            id
-            title
-            text
-            visibility
+            ...PostFragment_post
           }
         }
       }
+      ${PostFragment}
     `,
     {
       variables: {
@@ -95,12 +94,8 @@ export default function Profile() {
               {data.user.bio || "No user bio found."}
             </div>
             <div className="space-y-6 mt-4">
-              {data.user.pinnedPost && (
-                <Post post={data.user.pinnedPost} user={data.user} />
-              )}
-              {data.user.posts.map((post: any) => (
-                <Post user={data.user} post={post} />
-              ))}
+              {data.user.pinnedPost && <Post post={data.user.pinnedPost} />}
+              <PostGrid posts={data.user.posts} />
             </div>
           </div>
           <div className="bg-white -mt-16 shadow-lg p-6 w-80 rounded space-y-4 h-full">
