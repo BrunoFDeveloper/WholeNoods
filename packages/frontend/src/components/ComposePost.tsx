@@ -4,11 +4,13 @@ import Button from "./shared/Button";
 import { gql, useMutation } from "@apollo/client";
 import Toggle from "./shared/Toggle";
 import { useHistory } from "react-router-dom";
+import UploadFiles, { FileWithPreview } from "./CreatePost/UploadFiles";
 
 export default function ComposePost() {
   const history = useHistory();
   const [isPublic, setIsPublic] = useState(false);
   const [isPreview, setIsPreview] = useState(true);
+  const [files, setFiles] = useState<FileWithPreview[]>([]);
 
   const [commit] = useMutation(gql`
     mutation ComposePostMutation($input: CreatePostInput!) {
@@ -33,6 +35,7 @@ export default function ComposePost() {
             : isPreview
             ? "PRIVATE_PREVIEW"
             : "PRIVATE",
+          media: files,
         },
       },
     });
@@ -85,6 +88,8 @@ export default function ComposePost() {
               />
             </label>
           )}
+
+          <UploadFiles files={files} setFiles={setFiles} />
 
           <div className="mt-4 flex justify-end">
             <Button type="submit">Create Post</Button>

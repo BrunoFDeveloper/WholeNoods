@@ -4,6 +4,7 @@
 # -----------------------------------------------
 
 input CreatePostInput {
+  media: [Upload!]!
   text: String!
   title: String!
   visibility: PostVisibility!
@@ -77,6 +78,9 @@ type SignInResult {
   ok: Boolean!
   requiresTOTP: Boolean!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type User {
   bio: String

@@ -42,7 +42,6 @@ async function main() {
 
   const app = express();
 
-  app.use(bodyParser.json());
   app.use(
     cookieSession({
       name: "wholenoods.cookie",
@@ -52,6 +51,7 @@ async function main() {
 
   const server = new ApolloServer({
     schema,
+    uploads: true,
     async context({ req }): Promise<Context> {
       return {
         req,
@@ -63,20 +63,12 @@ async function main() {
   app.use(
     server.getMiddleware({
       path: "/graphql",
-      cors: {
-        origin: true,
-        credentials: true,
-      },
     })
   );
 
   app.use(
     server.getMiddleware({
       path: "/api/graphql",
-      cors: {
-        origin: true,
-        credentials: true,
-      },
     })
   );
 

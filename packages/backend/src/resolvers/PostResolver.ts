@@ -11,16 +11,19 @@ import {
   Int,
   Root,
 } from "type-graphql";
+import { FileUpload, GraphQLUpload } from "graphql-upload";
 import { Favorite } from "../entities/Favorite";
 import { Post, PostVisibility } from "../entities/Post";
 import { PostMedia, PostMediaType } from "../entities/PostMedia";
 import { AuthorizedContext } from "../types";
+import { upload } from "../utils/upload";
 
 @InputType()
 class CreatePostInput {
   @Field() title!: string;
   @Field() text!: string;
   @Field(() => PostVisibility) visibility!: PostVisibility;
+  @Field(() => [GraphQLUpload]) media!: Promise<FileUpload>[];
 }
 
 @InputType()
@@ -92,6 +95,15 @@ export class PostResolver {
     @Arg("input") input: CreatePostInput,
     @Ctx() { user }: AuthorizedContext
   ) {
+    const media = await Promise.all(input.media);
+
+    // TODO: Make upload take an array:
+    const uploadedAssets = await Promise.all(
+      media.map((individualMedia) => upload(individualMedia))
+    );
+
+    console.log(uploadedAssets);
+
     const post = Post.create({
       title: input.title,
       text: input.text,
