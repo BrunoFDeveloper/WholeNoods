@@ -1,18 +1,21 @@
 import "reflect-metadata";
-import express from "express";
-import bodyParser from "body-parser";
-import cookieSession from "cookie-session";
-import { ApolloServer } from "apollo-server-express";
+import Koa from "koa";
+import bodyParser from "koa-bodyparser";
+import session from "koa-session";
+import { ApolloServer } from "apollo-server-koa";
 import { AuthChecker, buildSchema } from "type-graphql";
+import { createConnection, getConnection } from "typeorm";
 import { AuthResolver } from "./resolvers/AuthResolver";
-import { createConnection } from "typeorm";
 import { User } from "./entities/User";
-import { Context, Session } from "./types";
+import { Context, KoaContext, Session } from "./types";
 import { HomeResolver } from "./resolvers/HomeResolver";
 import { UserResolver } from "./resolvers/UserResolver";
 import { SubscriptionResolver } from "./resolvers/SubscriptionResolver";
 import { PostResolver } from "./resolvers/PostResolver";
+import { ApolloServerLoaderPlugin } from "type-graphql-dataloader";
+import { run } from "./utils/currentRequest";
 
+const COOKIE_NAME = "wholenoods.cookie";
 const COOKIE_SECRET = "replace-before-prod";
 
 async function main() {
@@ -40,37 +43,49 @@ async function main() {
     authChecker,
   });
 
-  const app = express();
+  const app = new Koa();
 
-  app.use(
-    cookieSession({
-      name: "wholenoods.cookie",
-      keys: [COOKIE_SECRET],
-    })
-  );
+  app.keys = [COOKIE_SECRET];
+
+  const SESSION_CONFIG = {
+    key: COOKIE_NAME,
+    maxAge: 86400000 * 14,
+    autoCommit: true,
+    overwrite: true,
+    httpOnly: true,
+    signed: true,
+    rolling: true,
+    renew: false,
+  };
+
+  app.use(async (ctx: KoaContext, next) => {
+    ctx.context = {
+      ctx,
+      user: await User.fromSession(ctx),
+    };
+
+    await run(ctx.context, next);
+  });
+
+  app.use(session(SESSION_CONFIG, app));
+  app.use(bodyParser());
 
   const server = new ApolloServer({
     schema,
+    debug: true,
     uploads: true,
-    async context({ req }): Promise<Context> {
-      return {
-        req,
-        user: await User.fromSession(req.session as Session),
-      };
+    plugins: [
+      // @ts-ignore: There's a type mis-match here:
+      ApolloServerLoaderPlugin({
+        typeormGetConnection: getConnection,
+      }),
+    ],
+    async context({ ctx }): Promise<Context> {
+      return ctx.context;
     },
   });
 
-  app.use(
-    server.getMiddleware({
-      path: "/graphql",
-    })
-  );
-
-  app.use(
-    server.getMiddleware({
-      path: "/api/graphql",
-    })
-  );
+  server.applyMiddleware({ app, path: "/api/graphql" });
 
   app.listen(4000, () => {
     console.log("Apollo server running on port 4000.");

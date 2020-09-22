@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType, registerEnumType } from "type-graphql";
-import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
+import { TypeormLoader } from "type-graphql-dataloader";
+import { Column, Entity, ManyToOne, OneToMany, RelationId } from "typeorm";
 import { Lazy } from "../types";
 import { ExternalEntity } from "./BaseEntity";
 import { Favorite } from "./Favorite";
@@ -36,7 +37,11 @@ export class Post extends ExternalEntity {
 
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.posts, { lazy: true })
+  @TypeormLoader(() => User, (post: Post) => post.userId)
   user!: Lazy<User>;
+
+  @RelationId((post: Post) => post.user)
+  userId!: number;
 
   @OneToMany(() => Favorite, (favorite) => favorite.post, { lazy: true })
   favorites!: Lazy<Favorite[]>;

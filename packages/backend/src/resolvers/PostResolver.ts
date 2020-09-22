@@ -17,6 +17,11 @@ import { Post, PostVisibility } from "../entities/Post";
 import { PostMedia, PostMediaType } from "../entities/PostMedia";
 import { AuthorizedContext } from "../types";
 import { upload } from "../utils/upload";
+import { Loader } from "type-graphql-dataloader";
+import DataLoader from "dataloader";
+import { User } from "../entities/User";
+import { getCurrentRequest } from "../utils/currentRequest";
+import { In } from "typeorm";
 
 @InputType()
 class CreatePostInput {
@@ -126,13 +131,32 @@ export class PostResolver {
   }
 
   @FieldResolver(() => Int)
-  async favoritesCount(@Root() post: Post) {
-    return post.getFavoritesCount();
+  @Loader<number, number[]>(async (ids) => {
+    return await Favorite.findCountForPosts(ids);
+  })
+  favoritesCount(@Root() post: Post) {
+    return (dataloader: DataLoader<number, number[]>) =>
+      dataloader.load(post.id);
   }
 
   @Authorized()
   @FieldResolver(() => Boolean)
-  hasFavorited(@Root() post: Post, @Ctx() { user }: AuthorizedContext) {
-    return post.hasFavorited(user);
+  @Loader<number, boolean>(async (ids) => {
+    const { user } = getCurrentRequest<AuthorizedContext>();
+
+    const favorites = await Favorite.find({
+      where: {
+        user,
+        post: In([...ids]),
+      },
+    });
+
+    return ids.map((id) =>
+      favorites.find((favorite) => favorite.postId === id) ? true : false
+    );
+  })
+  hasFavorited(@Root() post: Post) {
+    return (dataloader: DataLoader<number, boolean>) =>
+      dataloader.load(post.id);
   }
 }

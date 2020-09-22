@@ -30,7 +30,6 @@ export class AuthResolver {
 
   @Mutation(() => Result)
   async signUp(
-    @Ctx() { req }: Context,
     @Arg("name") name: string,
     @Arg("email") email: string,
     @Arg("password") password: string
@@ -44,14 +43,13 @@ export class AuthResolver {
     await user.setPassword(password);
     await user.save();
 
-    user.signIn(req.session);
+    user.signIn();
 
     return new Result();
   }
 
   @Mutation(() => SignInResult)
   async signIn(
-    @Ctx() { req }: Context,
     @Arg("email") email: string,
     @Arg("password") password: string
   ) {
@@ -68,12 +66,12 @@ export class AuthResolver {
     }
 
     if (user.totpSecret) {
-      await user.signIn(req.session, AuthType.TOTP);
+      await user.signIn(AuthType.TOTP);
 
       return new SignInResult(true);
     }
 
-    await user.signIn(req.session);
+    await user.signIn();
 
     return new SignInResult(false);
   }

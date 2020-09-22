@@ -3,10 +3,11 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { authenticator } from "otplib";
 import SecurePassword from "secure-password";
 import { Post } from "./Post";
-import { Lazy, Session } from "../types";
+import { KoaContext, Lazy } from "../types";
 import { Subscription } from "./Subscription";
 import { ExternalEntity } from "./BaseEntity";
 import { Favorite } from "./Favorite";
+import { getCurrentRequest } from "../utils/currentRequest";
 
 const securePassword = new SecurePassword();
 
@@ -29,22 +30,29 @@ registerEnumType(UserType, {
 @ObjectType()
 export class User extends ExternalEntity {
   static async fromSession(
-    session: Session | null,
+    // NOTE: We can't use getCurrentRequest becase this is accessed outside of it.
+    ctx: KoaContext,
     allowedType: AuthType = AuthType.FULL
   ): Promise<User | undefined> {
-    if (session && session.userID && session.type === allowedType) {
-      return await this.findOne(session.userID);
+    if (ctx.session && ctx.session.userID && ctx.session.type === allowedType) {
+      return await this.findOne(ctx.session.userID);
     }
 
     return;
   }
 
-  static async fromTOTPSession(session: Session, token: string): Promise<User> {
-    if (!session.userID || session.type !== AuthType.TOTP) {
+  static async fromTOTPSession(token: string): Promise<User> {
+    const { ctx } = getCurrentRequest();
+
+    if (
+      !ctx.session ||
+      !ctx.session.userID ||
+      ctx.session.type !== AuthType.TOTP
+    ) {
       throw new Error("No TOTP session currently exists.");
     }
 
-    const user = await this.findOne(session.userID);
+    const user = await this.findOne(ctx.session.userID);
     if (!user || !user.totpSecret) {
       throw new Error("No user was found in the current session.");
     }
@@ -144,9 +152,10 @@ export class User extends ExternalEntity {
     );
   }
 
-  async signIn(session: Session, type: AuthType = AuthType.FULL) {
-    session.userID = this.id;
-    session.type = type;
+  async signIn(type: AuthType = AuthType.FULL) {
+    const { ctx } = getCurrentRequest();
+    ctx.session.userID = this.id;
+    ctx.session.type = type;
   }
 
   async canViewPosts(otherUser: User) {
