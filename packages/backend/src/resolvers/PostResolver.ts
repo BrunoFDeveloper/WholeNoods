@@ -155,6 +155,7 @@ export class PostResolver {
       favorites.find((favorite) => favorite.postId === id) ? true : false
     );
   })
+
   hasFavorited(@Root() post: Post) {
     return (dataloader: DataLoader<number, boolean>) =>
       dataloader.load(post.id);

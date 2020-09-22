@@ -53,10 +53,6 @@ export class Post extends ExternalEntity {
   })
   media!: Lazy<PostMedia[]>;
 
-  getFavoritesCount() {
-    return Favorite.count({ where: { post: this } });
-  }
-
   async hasFavorited(user: User) {
     const fav = await Favorite.findOne({
       where: {

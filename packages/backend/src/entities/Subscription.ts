@@ -5,6 +5,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   Unique,
 } from "typeorm";
 import { User, UserType } from "./User";
@@ -21,8 +22,14 @@ export class Subscription extends BaseEntity {
   @ManyToOne(() => User, (user) => user.subscriptions)
   fromUser!: User;
 
+  @RelationId((sub: Subscription) => sub.fromUser)
+  fromUserId!: number;
+
   @ManyToOne(() => User, (user) => user.subscribers)
   toUser!: User;
+
+  @RelationId((sub: Subscription) => sub.toUser)
+  toUserId!: number;
 
   @BeforeInsert()
   async sanityCheck() {

@@ -26,13 +26,14 @@ export class HomeResolver {
       where: {
         fromUser: user,
       },
-      relations: ["toUser"],
     });
 
     const posts = await Post.find({
       where: {
-        user: In([...usersForTimeline.map((sub) => sub.toUser.id), user.id]),
+        user: In([...usersForTimeline.map((sub) => sub.toUserId), user.id]),
       },
+      // For the home feed, we know what relations to load:
+      relations: ["user", "media"],
     });
 
     return {

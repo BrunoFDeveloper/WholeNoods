@@ -2,6 +2,12 @@ import "reflect-metadata";
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import session from "koa-session";
+import depthLimit from "graphql-depth-limit";
+import {
+  simpleEstimator,
+  getComplexity,
+  fieldExtensionsEstimator,
+} from "graphql-query-complexity";
 import { ApolloServer } from "apollo-server-koa";
 import { AuthChecker, buildSchema } from "type-graphql";
 import { createConnection, getConnection } from "typeorm";
@@ -17,6 +23,7 @@ import { run } from "./utils/currentRequest";
 
 const COOKIE_NAME = "wholenoods.cookie";
 const COOKIE_SECRET = "replace-before-prod";
+const MAX_COMPLEXITY = 20;
 
 async function main() {
   await createConnection(require("../ormconfig.js"));
@@ -79,10 +86,33 @@ async function main() {
       ApolloServerLoaderPlugin({
         typeormGetConnection: getConnection,
       }),
+      {
+        requestDidStart: () => ({
+          didResolveOperation({ request, document }) {
+            const complexity = getComplexity({
+              schema,
+              operationName: request.operationName,
+              query: document,
+              variables: request.variables,
+              estimators: [
+                fieldExtensionsEstimator(),
+                simpleEstimator({ defaultComplexity: 1 }),
+              ],
+            });
+
+            if (complexity > MAX_COMPLEXITY) {
+              throw new Error(`GraphQL query was too complex.`);
+            }
+
+            console.log("Used query complexity points:", complexity);
+          },
+        }),
+      },
     ],
     async context({ ctx }): Promise<Context> {
       return ctx.context;
     },
+    validationRules: [depthLimit(6)],
   });
 
   server.applyMiddleware({ app, path: "/api/graphql" });
