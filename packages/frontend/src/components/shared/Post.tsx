@@ -61,11 +61,6 @@ export default function Post({ post, user }: Props) {
     commit();
   }
 
-  console.log(post);
-
-  console.log(post.media[0]?.url);
-  console.log('foo' ?? 'bar');
-
   return (
     <div className="rounded-md bg-white shadow overflow-hidden">
       <div className="bg-indigo-300 h-32 relative overflow-hidden">
