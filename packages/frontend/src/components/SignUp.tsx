@@ -1,15 +1,16 @@
 import React from "react";
-import { useMutation, gql } from "@apollo/client";
 import Button from "./shared/Button";
 import Link from "./shared/Link";
 import { useHistory } from "react-router";
 import { useMst } from "../models";
+import { graphql, useMutation } from "react-relay/hooks";
+import { SignUpMutation } from "./__generated__/SignUpMutation.graphql";
 
 export default function SignUp() {
   const history = useHistory();
   const store = useMst();
 
-  const [commit] = useMutation(gql`
+  const [commit] = useMutation<SignUpMutation>(graphql`
     mutation SignUpMutation(
       $name: String!
       $email: String!
@@ -26,17 +27,17 @@ export default function SignUp() {
 
     const formData = new FormData(e.currentTarget);
 
-    const { data } = await commit({
+    commit({
       variables: {
-        name: formData.get("name"),
-        email: formData.get("email"),
-        password: formData.get("password"),
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+      },
+      onCompleted() {
+        store.user.setIsSignedIn(true);
+        history.push("/");
       },
     });
-
-    store.user.setIsSignedIn(true);
-
-    history.push("/");
   }
 
   return (

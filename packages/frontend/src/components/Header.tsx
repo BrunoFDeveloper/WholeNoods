@@ -1,18 +1,34 @@
-import { gql, useQuery } from "@apollo/client";
 import React from "react";
+import { graphql, useLazyLoadQuery } from "react-relay/hooks";
 import { Link } from "react-router-dom";
 import Underline from "./shared/Underline";
+import { HeaderUserLinksQuery } from "./__generated__/HeaderUserLinksQuery.graphql";
+
+function HeaderUserLinks() {
+  const data = useLazyLoadQuery<HeaderUserLinksQuery>(
+    graphql`
+      query HeaderUserLinksQuery {
+        viewer {
+          id
+          displayName
+        }
+      }
+    `,
+    {}
+  );
+
+  return data.viewer ? (
+    <Link className="font-bold text-lg" to={`/profiles/${data.viewer.id}`}>
+      <Underline>{data.viewer.displayName}</Underline>
+    </Link>
+  ) : (
+    <Link className="font-bold text-lg" to="/signin">
+      <Underline>Sign in</Underline>
+    </Link>
+  );
+}
 
 export default function Header() {
-  const { data } = useQuery(gql`
-    query HeaderQuery {
-      viewer {
-        id
-        displayName
-      }
-    }
-  `);
-
   return (
     <div className="py-6 px-12 bg-green-600 text-white">
       <div className="flex justify-between container mx-auto">
@@ -29,19 +45,9 @@ export default function Header() {
           </div>
         </div>
         <div>
-          {data &&
-            (data.viewer ? (
-              <Link
-                className="font-bold text-lg"
-                to={`/profiles/${data.viewer.id}`}
-              >
-                <Underline>{data.viewer.displayName}</Underline>
-              </Link>
-            ) : (
-              <Link className="font-bold text-lg" to="/signin">
-                <Underline>Sign in</Underline>
-              </Link>
-            ))}
+          <React.Suspense fallback={null}>
+            <HeaderUserLinks />
+          </React.Suspense>
         </div>
       </div>
     </div>

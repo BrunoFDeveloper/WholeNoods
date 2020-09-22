@@ -1,10 +1,11 @@
 import React from "react";
-import { gql, useMutation, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import Header from "./shared/Header";
 import Button from "./shared/Button";
-import Post, { PostFragment } from "./shared/Post";
-import PostGrid from "./shared/PostGrid";
+import Post from "./shared/Post";
+import { graphql, useLazyLoadQuery, useMutation } from "react-relay/hooks";
+import { ProfileQuery } from "./__generated__/ProfileQuery.graphql";
+import { ProfileSubscribeMutation } from "./__generated__/ProfileSubscribeMutation.graphql";
 
 function Stat({ count, label }: { count: number; label: string }) {
   return (
@@ -17,8 +18,8 @@ function Stat({ count, label }: { count: number; label: string }) {
 
 export default function Profile() {
   const params = useParams<{ id: string }>();
-  const { data, loading } = useQuery(
-    gql`
+  const data = useLazyLoadQuery<ProfileQuery>(
+    graphql`
       query ProfileQuery($id: ID!) {
         user(id: $id) {
           id
@@ -28,45 +29,31 @@ export default function Profile() {
           postsCount
           subscribersCount
           isCurrentlySubscribed
+          ...PostUser_user
           pinnedPost {
-            id
-            title
-            text
-            visibility
+            ...Post_post
           }
           posts {
-            ...PostFragment_post
+            ...Post_post
           }
         }
       }
-      ${PostFragment}
     `,
     {
-      variables: {
-        id: params.id,
-      },
+      id: params.id,
     }
   );
 
-  const [mutate] = useMutation(
-    gql`
+  const [commit] = useMutation<ProfileSubscribeMutation>(
+    graphql`
       mutation ProfileSubscribeMutation($id: ID!) {
         subscribe(user: $id) {
           id
           isCurrentlySubscribed
         }
       }
-    `,
-    {
-      variables: {
-        id: params.id,
-      },
-    }
+    `
   );
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div>
@@ -95,7 +82,11 @@ export default function Profile() {
             </div>
             <div className="space-y-6 mt-4">
               {data.user.pinnedPost && <Post post={data.user.pinnedPost} />}
-              <PostGrid posts={data.user.posts} />
+              <div className="grid grid-cols-3 gap-4">
+                {data.user.posts.map((post) => (
+                  <Post post={post} user={data.user} />
+                ))}
+              </div>
             </div>
           </div>
           <div className="bg-white -mt-16 shadow-lg p-6 w-80 rounded space-y-4 h-full">

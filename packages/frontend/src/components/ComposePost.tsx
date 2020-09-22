@@ -1,10 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Header from "./shared/Header";
 import Button from "./shared/Button";
-import { gql, useMutation } from "@apollo/client";
 import Toggle from "./shared/Toggle";
 import { useHistory } from "react-router-dom";
 import UploadFiles, { FileWithPreview } from "./CreatePost/UploadFiles";
+import { graphql, useMutation } from "react-relay/hooks";
+import { ComposePostMutation } from "./__generated__/ComposePostMutation.graphql";
 
 export default function ComposePost() {
   const history = useHistory();
@@ -12,7 +13,7 @@ export default function ComposePost() {
   const [isPreview, setIsPreview] = useState(true);
   const [files, setFiles] = useState<FileWithPreview[]>([]);
 
-  const [commit] = useMutation(gql`
+  const [commit] = useMutation<ComposePostMutation>(graphql`
     mutation ComposePostMutation($input: CreatePostInput!) {
       createPost(input: $input) {
         id
@@ -25,11 +26,11 @@ export default function ComposePost() {
 
     const formData = new FormData(e.currentTarget);
 
-    const { data } = await commit({
+    commit({
       variables: {
         input: {
-          title: formData.get("title"),
-          text: formData.get("text"),
+          title: formData.get("title") as string,
+          text: formData.get("text") as string,
           visibility: isPublic
             ? "PUBLIC"
             : isPreview
@@ -38,9 +39,10 @@ export default function ComposePost() {
           media: files,
         },
       },
+      onCompleted(data) {
+        history.push(`/posts/${data.createPost.id}`);
+      },
     });
-
-    history.push(`/posts/${data.createPost.id}`);
   }
 
   return (

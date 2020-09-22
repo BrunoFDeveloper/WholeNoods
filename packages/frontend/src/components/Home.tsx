@@ -1,30 +1,29 @@
-import { gql, useQuery } from "@apollo/client";
 import React from "react";
-import Post, { PostFragment } from "./shared/Post";
+import Post from "./shared/Post";
+import { useLazyLoadQuery, graphql } from "react-relay/hooks";
+import { HomeQuery } from "./__generated__/HomeQuery.graphql";
 
 export default function Home() {
-  const { data, loading } = useQuery(gql`
-    query HomeQuery {
-      home {
-        posts {
-          ...PostFragment_post
-          user {
+  const data = useLazyLoadQuery<HomeQuery>(
+    graphql`
+      query HomeQuery {
+        home {
+          posts {
             id
-            displayName
+            ...Post_post
+            user {
+              ...PostUser_user
+            }
           }
         }
       }
-    }
-    ${PostFragment}
-  `);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+    `,
+    {}
+  );
 
   return (
     <div className="container mx-auto">
-      {data.home.posts.map((post: any) => (
+      {data.home.posts.map((post) => (
         <Post post={post} user={post.user} />
       ))}
     </div>

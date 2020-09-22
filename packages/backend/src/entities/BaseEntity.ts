@@ -53,8 +53,8 @@ export abstract class ExternalEntity extends BaseEntity {
   // }
 
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  readonly id!: number;
+  @PrimaryGeneratedColumn("uuid")
+  readonly id!: string;
 
   @Field()
   @CreateDateColumn()

@@ -1,45 +1,36 @@
-import { gql, useMutation } from "@apollo/client";
 import clsx from "clsx";
 import React from "react";
-import { Link } from "react-router-dom";
+import { graphql, useFragment, useMutation } from "react-relay/hooks";
+import PostUser from "./PostUser";
+import { PostUser_user$key } from "./__generated__/PostUser_user.graphql";
+import { Post_post$key } from "./__generated__/Post_post.graphql";
 
 type Props = {
-  post: {
-    id: string;
-    title: string;
-    text: string;
-    visibility?: string;
-    favoritesCount: number;
-    hasFavorited: boolean;
-    media: {
-      url: string;
-      type: string;
-    }[];
-  };
-  user?: {
-    id: string;
-    displayName: string;
-  };
+  post: Post_post$key;
+  user?: PostUser_user$key;
 };
 
-export const PostFragment = gql`
-  fragment PostFragment_post on Post {
-    id
-    title
-    text
-    visibility
-    favoritesCount
-    hasFavorited
-    media {
-      url
-      type
-    }
-  }
-`;
-
 export default function Post({ post, user }: Props) {
+  const data = useFragment(
+    graphql`
+      fragment Post_post on Post {
+        id
+        title
+        text
+        visibility
+        favoritesCount
+        hasFavorited
+        media {
+          url
+          type
+        }
+      }
+    `,
+    post
+  );
+
   const [commit] = useMutation(
-    gql`
+    graphql`
       mutation PostFavoriteMutation($input: FavoritePostInput!) {
         favoritePost(input: $input) {
           id
@@ -47,32 +38,31 @@ export default function Post({ post, user }: Props) {
           hasFavorited
         }
       }
-    `,
-    {
-      variables: {
-        input: {
-          id: post.id,
-        },
-      },
-    }
+    `
   );
 
   function handleFavorite() {
-    commit();
+    commit({
+      variables: {
+        input: {
+          id: data.id,
+        },
+      },
+    });
   }
 
   return (
     <div className="rounded-md bg-white shadow overflow-hidden">
       <div className="bg-indigo-300 h-32 relative overflow-hidden">
         <img
-          src={post.media[0]?.url ?? "https://picsum.photos/300/300"}
-          alt={post.title}
+          src={data.media[0]?.url ?? "https://picsum.photos/300/300"}
+          alt={data.title || "Post Image"}
           className="object-cover absolute w-full h-full"
         />
-        {post.visibility && (
+        {data.visibility && (
           <div className="absolute right-0 flex justify-end p-2">
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-gray-100 text-gray-800">
-              {post.visibility}
+              {data.visibility}
             </span>
           </div>
         )}
@@ -84,13 +74,13 @@ export default function Post({ post, user }: Props) {
           <button
             className={clsx(
               "flex items-center space-x-1 focus:outline-none",
-              post.hasFavorited ? "text-green-600" : "text-gray-400"
+              data.hasFavorited ? "text-green-600" : "text-gray-400"
             )}
             onClick={handleFavorite}
           >
-            <div className="text-sm">{post.favoritesCount ?? "0"}</div>
+            <div className="text-sm">{data.favoritesCount ?? "0"}</div>
             <div>
-              {post.hasFavorited ? (
+              {data.hasFavorited ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
@@ -124,19 +114,12 @@ export default function Post({ post, user }: Props) {
         </div>
 
         <div className="font-serif font-semibold text-xl text-gray-900">
-          {post.title}
+          {data.title}
         </div>
 
-        <div className="text-gray-700 text-lg">{post.text}</div>
+        <div className="text-gray-700 text-lg">{data.text}</div>
 
-        {user && (
-          <Link to={`/profiles/${user.id}`} className="flex items-center">
-            <div className="rounded-full h-8 w-8 bg-red-300 mr-4" />
-            <div className="text-gray-900 font-semibold">
-              {user.displayName}
-            </div>
-          </Link>
-        )}
+        {user && <PostUser user={user} />}
       </div>
     </div>
   );

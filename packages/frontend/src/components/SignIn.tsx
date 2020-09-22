@@ -1,14 +1,15 @@
 import React from "react";
-import { gql, useMutation } from "@apollo/client";
 import Button from "./shared/Button";
 import Link from "./shared/Link";
 import { useHistory } from "react-router";
 import { useMst } from "../models";
+import { graphql, useMutation } from "react-relay/hooks";
+import { SignInMutation } from "./__generated__/SignInMutation.graphql";
 
 export default function SignIn() {
   const store = useMst();
   const history = useHistory();
-  const [mutate] = useMutation(gql`
+  const [commit] = useMutation<SignInMutation>(graphql`
     mutation SignInMutation($email: String!, $password: String!) {
       signIn(email: $email, password: $password) {
         requiresTOTP
@@ -20,16 +21,17 @@ export default function SignIn() {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const { data } = await mutate({
+
+    commit({
       variables: {
-        email: formData.get("email"),
-        password: formData.get("password"),
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+      },
+      onCompleted() {
+        store.user.setIsSignedIn(true);
+        history.push("/");
       },
     });
-
-    store.user.setIsSignedIn(true);
-
-    history.push("/");
   }
 
   return (

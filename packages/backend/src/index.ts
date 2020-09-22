@@ -23,7 +23,7 @@ import { run } from "./utils/currentRequest";
 
 const COOKIE_NAME = "wholenoods.cookie";
 const COOKIE_SECRET = "replace-before-prod";
-const MAX_COMPLEXITY = 20;
+const MAX_COMPLEXITY = 50;
 
 async function main() {
   await createConnection(require("../ormconfig.js"));
@@ -101,7 +101,7 @@ async function main() {
             });
 
             if (complexity > MAX_COMPLEXITY) {
-              throw new Error(`GraphQL query was too complex.`);
+              throw new Error(`GraphQL query was too complex (${complexity}).`);
             }
 
             console.log("Used query complexity points:", complexity);

@@ -13,8 +13,8 @@ import { User, UserType } from "./User";
 @Entity()
 @Unique(["fromUser", "toUser"])
 export class Subscription extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @CreateDateColumn()
   createdAt!: Date;

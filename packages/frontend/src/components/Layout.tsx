@@ -1,4 +1,3 @@
-import { gql, useQuery } from "@apollo/client";
 import React from "react";
 import Header from "./Header";
 
@@ -7,18 +6,12 @@ type Props = {
 };
 
 export default function Layout({ children }: Props) {
-  useQuery(gql`
-    query {
-      viewer {
-        id
-      }
-    }
-  `);
-
   return (
     <div>
       <Header />
-      {children}
+      <React.Suspense fallback="TODO: Real fallback UI">
+        {children}
+      </React.Suspense>
     </div>
   );
 }
