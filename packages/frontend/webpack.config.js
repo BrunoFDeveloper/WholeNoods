@@ -38,7 +38,12 @@ module.exports = {
                     exclude: ["transform-typeof-symbol"],
                   },
                 ],
-                "@babel/preset-react",
+                [
+                  "@babel/preset-react",
+                  {
+                    runtime: "automatic",
+                  },
+                ],
               ],
               plugins: [
                 "relay",

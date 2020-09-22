@@ -1,4 +1,3 @@
-import React from "react";
 import { RelayEnvironmentProvider } from "react-relay/hooks";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ComposePost from "./components/ComposePost";
