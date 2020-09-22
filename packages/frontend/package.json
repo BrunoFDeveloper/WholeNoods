@@ -4,10 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "parcel ./src/index.html --no-source-maps --hmr-port 4321"
+    "start": "parcel ./src/index.html --no-source-maps --hmr-port 4321",
+    "dev": "NODE_ENV=development webpack-dev-server"
   },
   "dependencies": {
     "@apollo/client": "^3.1.5",
+    "@babel/runtime-corejs3": "^7.11.2",
     "@tailwindcss/typography": "^0.2.0",
     "@tailwindcss/ui": "^0.6.2",
     "@types/apollo-upload-client": "^14.1.0",
@@ -22,16 +24,47 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.2.0",
+    "react-relay": "^0.0.0-experimental-183bdd28",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "relay-runtime": "^10.0.1",
     "tailwindcss": "^1.8.9",
     "typescript": "^4.0.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-transform-runtime": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.2",
     "@types/react": "^16.9.49",
-    "@types/react-dom": "^16.9.8"
+    "@types/react-dom": "^16.9.8",
+    "@types/react-relay": "^7.0.11",
+    "@types/relay-runtime": "^10.0.4",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-relay": "^10.0.1",
+    "css-loader": "^4.3.0",
+    "file-loader": "^6.1.0",
+    "html-webpack-plugin": "^4.5.0",
+    "mini-css-extract-plugin": "^0.11.2",
+    "postcss-loader": "^4.0.2",
+    "react-refresh": "^0.8.3",
+    "relay-compiler": "^10.0.1",
+    "relay-compiler-language-typescript": "^13.0.1",
+    "relay-config": "^10.0.1",
+    "ts-loader": "^8.0.4",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
-  "browserslist": [
-    "last 1 Chrome version"
-  ]
+  "browserslist": {
+    "development": [
+      "last 1 version"
+    ],
+    "production": [
+      "last 1 version",
+      "> 1%"
+    ]
+  }
 }
