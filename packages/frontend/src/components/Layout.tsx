@@ -1,4 +1,4 @@
-import React from "react";
+import { Suspense } from "react";
 import Header from "./Header";
 
 type Props = {
@@ -9,9 +9,9 @@ export default function Layout({ children }: Props) {
   return (
     <div>
       <Header />
-      <React.Suspense fallback="TODO: Real fallback UI">
+      <Suspense fallback="TODO: Real fallback UI">
         {children}
-      </React.Suspense>
+      </Suspense>
     </div>
   );
 }

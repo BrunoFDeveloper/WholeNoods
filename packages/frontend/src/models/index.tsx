@@ -1,4 +1,4 @@
-import React, { useContext, createContext } from "react";
+import { useContext, createContext } from "react";
 import { Instance } from "mobx-state-tree";
 import { RootModel } from "./Root";
 

@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import React from "react";
 import { graphql, useFragment, useMutation } from "react-relay/hooks";
 import PostUser from "./PostUser";
 import { PostUser_user$key } from "./__generated__/PostUser_user.graphql";

@@ -1,4 +1,3 @@
-import React from "react";
 import Post from "./shared/Post";
 import { useLazyLoadQuery, graphql } from "react-relay/hooks";
 import { HomeQuery } from "./__generated__/HomeQuery.graphql";

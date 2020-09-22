@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Header from "./shared/Header";
 import Button from "./shared/Button";
 import Toggle from "./shared/Toggle";

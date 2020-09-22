@@ -1,4 +1,3 @@
-import React from "react";
 import Button from "./shared/Button";
 import Link from "./shared/Link";
 import { useHistory } from "react-router";

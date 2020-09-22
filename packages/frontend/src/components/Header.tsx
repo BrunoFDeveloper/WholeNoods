@@ -1,4 +1,4 @@
-import React from "react";
+import { Suspense } from "react";
 import { graphql, useLazyLoadQuery } from "react-relay/hooks";
 import { Link } from "react-router-dom";
 import Underline from "./shared/Underline";
@@ -45,9 +45,9 @@ export default function Header() {
           </div>
         </div>
         <div>
-          <React.Suspense fallback={null}>
+          <Suspense fallback={null}>
             <HeaderUserLinks />
-          </React.Suspense>
+          </Suspense>
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-import React from "react";
 import { graphql, useFragment } from "react-relay/hooks";
 import { Link } from "react-router-dom";
 

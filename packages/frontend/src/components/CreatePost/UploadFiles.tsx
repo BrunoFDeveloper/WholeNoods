@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 
 export type FileWithPreview = File & {
