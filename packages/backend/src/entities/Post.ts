@@ -41,7 +41,7 @@ export class Post extends ExternalEntity {
   user!: Lazy<User>;
 
   @RelationId((post: Post) => post.user)
-  userId!: number;
+  userId!: string;
 
   @OneToMany(() => Favorite, (favorite) => favorite.post, { lazy: true })
   favorites!: Lazy<Favorite[]>;

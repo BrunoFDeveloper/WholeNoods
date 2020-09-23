@@ -1,6 +1,6 @@
 import Button from "./shared/Button";
 import Link from "./shared/Link";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import { useMst } from "../models";
 import { graphql, useMutation } from "react-relay/hooks";
 import { SignInMutation } from "./__generated__/SignInMutation.graphql";
@@ -9,7 +9,7 @@ import Input from "./forms/Input";
 
 export default function SignIn() {
   const store = useMst();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [commit] = useMutation<SignInMutation>(graphql`
     mutation SignInMutation($email: String!, $password: String!) {
       signIn(email: $email, password: $password) {
@@ -26,7 +26,7 @@ export default function SignIn() {
       },
       onCompleted() {
         store.user.setIsSignedIn(true);
-        history.push("/");
+        navigate("/");
       },
     });
   }

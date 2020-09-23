@@ -12,12 +12,12 @@ import {
   Root,
 } from "type-graphql";
 import { FileUpload, GraphQLUpload } from "graphql-upload";
+import { Loader } from "type-graphql-dataloader";
 import { Favorite } from "../entities/Favorite";
 import { Post, PostVisibility } from "../entities/Post";
 import { PostMedia, PostMediaType } from "../entities/PostMedia";
 import { AuthorizedContext } from "../types";
 import { upload } from "../utils/upload";
-import { Loader } from "type-graphql-dataloader";
 import DataLoader from "dataloader";
 import { User } from "../entities/User";
 import { getCurrentRequest } from "../utils/currentRequest";
@@ -131,17 +131,17 @@ export class PostResolver {
   }
 
   @FieldResolver(() => Int)
-  @Loader<number, number[]>(async (ids) => {
+  @Loader<string, number[]>(async (ids) => {
     return await Favorite.findCountForPosts(ids);
   })
   favoritesCount(@Root() post: Post) {
-    return (dataloader: DataLoader<number, number[]>) =>
+    return (dataloader: DataLoader<string, number[]>) =>
       dataloader.load(post.id);
   }
 
   @Authorized()
   @FieldResolver(() => Boolean)
-  @Loader<number, boolean>(async (ids) => {
+  @Loader<string, boolean>(async (ids) => {
     const { user } = getCurrentRequest<AuthorizedContext>();
 
     const favorites = await Favorite.find({
@@ -155,9 +155,8 @@ export class PostResolver {
       favorites.find((favorite) => favorite.postId === id) ? true : false
     );
   })
-
   hasFavorited(@Root() post: Post) {
-    return (dataloader: DataLoader<number, boolean>) =>
+    return (dataloader: DataLoader<string, boolean>) =>
       dataloader.load(post.id);
   }
 }

@@ -10,7 +10,7 @@ import { User } from "./User";
 @Entity()
 @Unique(["user", "post"])
 export class Favorite extends ExternalEntity {
-  static async findCountForPosts(ids: readonly number[]) {
+  static async findCountForPosts(ids: readonly string[]) {
     const favorites = await this.createQueryBuilder("favorite")
       .select([
         `"favorite"."postId" as post_id`,
@@ -21,8 +21,7 @@ export class Favorite extends ExternalEntity {
       .getRawMany();
 
     return ids.map(
-      (id) =>
-        favorites.find((fav) => String(fav.post_id) === String(id))?.count ?? 0
+      (id) => favorites.find((fav) => fav.post_id === id)?.count ?? 0
     );
   }
 
@@ -33,5 +32,5 @@ export class Favorite extends ExternalEntity {
   post!: Lazy<Post>;
 
   @RelationId((favorite: Favorite) => favorite.post)
-  postId!: number;
+  postId!: string;
 }

@@ -42,6 +42,9 @@ export default function Header() {
             <a className="font-bold text-lg" href="/posts/create">
               <Underline>Create Post</Underline>
             </a>
+            <a className="font-bold text-lg" href="/messages">
+              <Underline>Messages</Underline>
+            </a>
           </div>
         </div>
         <div>

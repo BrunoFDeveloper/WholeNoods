@@ -23,6 +23,31 @@ type HomePage {
   posts: [Post!]!
 }
 
+type Message {
+  createdAt: DateTime!
+  id: ID!
+  text: String!
+  updatedAt: DateTime!
+  user: User!
+}
+
+type MessageThread {
+  createdAt: DateTime!
+  id: ID!
+  lastMessage: Message
+  messages: [Message!]!
+  participants: [MessageThreadParticipant!]!
+  updatedAt: DateTime!
+}
+
+type MessageThreadParticipant {
+  createdAt: DateTime!
+  id: ID!
+  thread: MessageThread!
+  updatedAt: DateTime!
+  user: User!
+}
+
 type Mutation {
   convertToCreator: User!
   createPost(input: CreatePostInput!): Post!
@@ -66,6 +91,7 @@ enum PostVisibility {
 
 type Query {
   home: HomePage!
+  messageThreads: [MessageThread!]!
   user(id: ID!): User!
   viewer: User
 }

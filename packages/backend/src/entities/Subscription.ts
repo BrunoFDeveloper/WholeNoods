@@ -23,13 +23,13 @@ export class Subscription extends BaseEntity {
   fromUser!: User;
 
   @RelationId((sub: Subscription) => sub.fromUser)
-  fromUserId!: number;
+  fromUserId!: string;
 
   @ManyToOne(() => User, (user) => user.subscribers)
   toUser!: User;
 
   @RelationId((sub: Subscription) => sub.toUser)
-  toUserId!: number;
+  toUserId!: string;
 
   @BeforeInsert()
   async sanityCheck() {

@@ -8,6 +8,8 @@ import { Subscription } from "./Subscription";
 import { ExternalEntity } from "./BaseEntity";
 import { Favorite } from "./Favorite";
 import { getCurrentRequest } from "../utils/currentRequest";
+import { MessageThread } from "./MessageThread";
+import { MessageThreadParticipant } from "./MessageThreadParticipant";
 
 const securePassword = new SecurePassword();
 
@@ -129,6 +131,9 @@ export class User extends ExternalEntity {
     lazy: true,
   })
   subscriptions!: Lazy<Subscription[]>;
+
+  @OneToMany(() => MessageThreadParticipant, thread => thread.user, { lazy: true })
+  threads!: Lazy<MessageThreadParticipant[]>;
 
   async setPassword(password: string) {
     this.passwordHash = await securePassword.hash(Buffer.from(password));
