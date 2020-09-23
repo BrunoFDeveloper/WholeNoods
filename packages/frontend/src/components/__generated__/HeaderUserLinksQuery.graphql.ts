@@ -7,7 +7,7 @@ export type HeaderUserLinksQueryVariables = {};
 export type HeaderUserLinksQueryResponse = {
     readonly viewer: {
         readonly id: string;
-        readonly displayName: string;
+        readonly name: string;
     } | null;
 };
 export type HeaderUserLinksQuery = {
@@ -21,7 +21,7 @@ export type HeaderUserLinksQuery = {
 query HeaderUserLinksQuery {
   viewer {
     id
-    displayName
+    name
   }
 }
 */
@@ -47,7 +47,7 @@ var v0 = [
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "displayName",
+        "name": "name",
         "storageKey": null
       }
     ],
@@ -72,14 +72,14 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "2bc86e4a1b2c0f24901219b0d1482a7c",
+    "cacheID": "05a5228b7d36abe4ee861a2fc6f1418b",
     "id": null,
     "metadata": {},
     "name": "HeaderUserLinksQuery",
     "operationKind": "query",
-    "text": "query HeaderUserLinksQuery {\n  viewer {\n    id\n    displayName\n  }\n}\n"
+    "text": "query HeaderUserLinksQuery {\n  viewer {\n    id\n    name\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'c369f2331525a1088ea8c3af8028b0a5';
+(node as any).hash = 'c726898c7f2426934ec8bbe1057dc135';
 export default node;

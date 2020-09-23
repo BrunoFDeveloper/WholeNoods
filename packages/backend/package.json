@@ -2,7 +2,7 @@
   "name": "@noods/backend",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE.MD",
   "scripts": {
     "start": "ts-node-dev --transpile-only --respawn ./src/index.ts",
     "seed": "ts-node --transpile-only ./src/__seeds__/docker.ts"

@@ -22,7 +22,7 @@ export default function Profile() {
 			query ProfileQuery($id: ID!) {
 				user(id: $id) {
 					id
-					displayName
+					name
 					bio
 					type
 					postsCount
@@ -70,7 +70,7 @@ export default function Profile() {
 					</div>
 					<div className="flex-1">
 						<div className="flex my-6">
-							<Header>{data.user.displayName}</Header>
+							<Header>{data.user.name}</Header>
 							<div className="flex space-x-6 ml-12">
 								<Stat count={data.user.postsCount} label="posts" />
 								<Stat count={data.user.subscribersCount} label="subscribers" />

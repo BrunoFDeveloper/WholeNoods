@@ -30,7 +30,7 @@ fragment Thread_messageThread on MessageThread {
   participants {
     user {
       id
-      displayName
+      name
     }
     id
   }
@@ -113,7 +113,7 @@ return {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "displayName",
+                    "name": "name",
                     "storageKey": null
                   }
                 ],
@@ -148,12 +148,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "385b8bc715a703f9c5898be789086635",
+    "cacheID": "3aec21896b0ea98947005e5a50b29fb2",
     "id": null,
     "metadata": {},
     "name": "ThreadsQuery",
     "operationKind": "query",
-    "text": "query ThreadsQuery {\n  messageThreads {\n    id\n    ...Thread_messageThread\n  }\n}\n\nfragment Thread_messageThread on MessageThread {\n  participants {\n    user {\n      id\n      displayName\n    }\n    id\n  }\n  lastMessage {\n    id\n    text\n  }\n}\n"
+    "text": "query ThreadsQuery {\n  messageThreads {\n    id\n    ...Thread_messageThread\n  }\n}\n\nfragment Thread_messageThread on MessageThread {\n  participants {\n    user {\n      id\n      name\n    }\n    id\n  }\n  lastMessage {\n    id\n    text\n  }\n}\n"
   }
 };
 })();

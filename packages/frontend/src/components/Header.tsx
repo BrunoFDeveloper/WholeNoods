@@ -10,7 +10,7 @@ function HeaderUserLinks() {
       query HeaderUserLinksQuery {
         viewer {
           id
-          displayName
+          name
         }
       }
     `,
@@ -19,7 +19,7 @@ function HeaderUserLinks() {
 
   return data.viewer ? (
     <Link className="font-bold text-lg" to={`/profiles/${data.viewer.id}`}>
-      <Underline>{data.viewer.displayName}</Underline>
+      <Underline>{data.viewer.name}</Underline>
     </Link>
   ) : (
     <Link className="font-bold text-lg" to="/signin">

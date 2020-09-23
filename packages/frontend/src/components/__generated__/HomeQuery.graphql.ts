@@ -39,7 +39,7 @@ query HomeQuery {
 
 fragment PostUser_user on User {
   id
-  displayName
+  name
 }
 
 fragment Post_post on Post {
@@ -217,7 +217,7 @@ return {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "displayName",
+                    "name": "name",
                     "storageKey": null
                   }
                 ],
@@ -232,12 +232,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "21b70038a9d0bd66fe3dfb7267e07ae4",
+    "cacheID": "ffe37afc0c8e35f9f9c193798e931abb",
     "id": null,
     "metadata": {},
     "name": "HomeQuery",
     "operationKind": "query",
-    "text": "query HomeQuery {\n  home {\n    posts {\n      id\n      ...Post_post\n      user {\n        ...PostUser_user\n        id\n      }\n    }\n  }\n}\n\nfragment PostUser_user on User {\n  id\n  displayName\n}\n\nfragment Post_post on Post {\n  id\n  title\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  media {\n    url\n    type\n    id\n  }\n}\n"
+    "text": "query HomeQuery {\n  home {\n    posts {\n      id\n      ...Post_post\n      user {\n        ...PostUser_user\n        id\n      }\n    }\n  }\n}\n\nfragment PostUser_user on User {\n  id\n  name\n}\n\nfragment Post_post on Post {\n  id\n  title\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  media {\n    url\n    type\n    id\n  }\n}\n"
   }
 };
 })();

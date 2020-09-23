@@ -11,8 +11,8 @@ export type ProfileQueryVariables = {
 export type ProfileQueryResponse = {
     readonly user: {
         readonly id: string;
-        readonly displayName: string;
-        readonly bio: string | null;
+        readonly name: string;
+        readonly bio: string;
         readonly type: UserType;
         readonly postsCount: number;
         readonly subscribersCount: number;
@@ -39,7 +39,7 @@ query ProfileQuery(
 ) {
   user(id: $id) {
     id
-    displayName
+    name
     bio
     type
     postsCount
@@ -59,7 +59,7 @@ query ProfileQuery(
 
 fragment PostUser_user on User {
   id
-  displayName
+  name
 }
 
 fragment Post_post on Post {
@@ -103,7 +103,7 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "displayName",
+  "name": "name",
   "storageKey": null
 },
 v4 = {
@@ -307,14 +307,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "81d04e885c3bb987278191dd18a9eb87",
+    "cacheID": "0efde03021c41b00235b66a831ad4a01",
     "id": null,
     "metadata": {},
     "name": "ProfileQuery",
     "operationKind": "query",
-    "text": "query ProfileQuery(\n  $id: ID!\n) {\n  user(id: $id) {\n    id\n    displayName\n    bio\n    type\n    postsCount\n    subscribersCount\n    isCurrentlySubscribed\n    ...PostUser_user\n    pinnedPost {\n      ...Post_post\n      id\n    }\n    posts {\n      ...Post_post\n      id\n    }\n  }\n}\n\nfragment PostUser_user on User {\n  id\n  displayName\n}\n\nfragment Post_post on Post {\n  id\n  title\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  media {\n    url\n    type\n    id\n  }\n}\n"
+    "text": "query ProfileQuery(\n  $id: ID!\n) {\n  user(id: $id) {\n    id\n    name\n    bio\n    type\n    postsCount\n    subscribersCount\n    isCurrentlySubscribed\n    ...PostUser_user\n    pinnedPost {\n      ...Post_post\n      id\n    }\n    posts {\n      ...Post_post\n      id\n    }\n  }\n}\n\nfragment PostUser_user on User {\n  id\n  name\n}\n\nfragment Post_post on Post {\n  id\n  title\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  media {\n    url\n    type\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '7a06908080eba7a4ef3275b0eb4a9b59';
+(node as any).hash = '8c8296d00e58b821dcb48592fdbf05fb';
 export default node;

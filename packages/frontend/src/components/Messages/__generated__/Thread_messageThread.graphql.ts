@@ -8,7 +8,7 @@ export type Thread_messageThread = {
     readonly participants: ReadonlyArray<{
         readonly user: {
             readonly id: string;
-            readonly displayName: string;
+            readonly name: string;
         };
     }>;
     readonly lastMessage: {
@@ -60,7 +60,7 @@ return {
               "alias": null,
               "args": null,
               "kind": "ScalarField",
-              "name": "displayName",
+              "name": "name",
               "storageKey": null
             }
           ],
@@ -93,5 +93,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = 'db9def267d42ff450dcede547fdd14e9';
+(node as any).hash = '97a66a74e574431ec191061ec4ff8939';
 export default node;

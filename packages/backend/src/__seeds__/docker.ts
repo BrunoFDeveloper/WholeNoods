@@ -8,14 +8,14 @@ async function main() {
 	await createConnection(require('../../ormconfig.js'));
 
 	let user = await User.findOne({
-		where: { email: 'admin@vapejuicejordan.rip' },
+		where: { username: 'vapejuicejordan' },
 	});
 
 	if (!user) {
 		const user = User.create({
+			username: 'vapejuicejordan',
 			email: 'admin@vapejuicejordan.rip',
-			displayName: 'Jordan',
-			legalName: 'Jordan Gensler',
+			name: 'Jordan',
 			bio: 'I created this site, what else do you want to know?',
 			type: UserType.CREATOR,
 		});

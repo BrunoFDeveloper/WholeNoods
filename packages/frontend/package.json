@@ -2,7 +2,7 @@
   "name": "@noods/frontend",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE.MD",
   "scripts": {
     "start": "parcel ./src/index.html --no-source-maps --hmr-port 4321",
     "dev": "NODE_ENV=development webpack-dev-server",

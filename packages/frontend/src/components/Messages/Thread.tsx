@@ -12,7 +12,7 @@ export default function Thread({ thread }: Props) {
 				participants {
 					user {
 						id
-						displayName
+						name
 					}
 				}
 				lastMessage {
@@ -29,7 +29,7 @@ export default function Thread({ thread }: Props) {
 			<div className="h-6 p-6 bg-red-400 rounded-full" />
 			<div className="overflow-hidden">
 				<div className="font-semibold">
-					{data.participants[0].user.displayName}
+					{data.participants[0].user.name}
 				</div>
 				<div className="text-xs truncate mt-0.5">{data.lastMessage?.text}</div>
 			</div>

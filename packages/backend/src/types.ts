@@ -1,25 +1,25 @@
-import Koa from "koa";
-import { User, AuthType } from "./entities/User";
+import Koa from 'koa';
+import { User, AuthType } from './entities/User';
 
 export type Session = {
-  userID: number;
-  type: AuthType;
+	userID: string;
+	type: AuthType;
 };
 
 export type Lazy<T> = T | Promise<T>;
 
 export type KoaContext = Koa.ParameterizedContext & {
-  session: Session;
+	session: Session;
 };
 
 export type AuthorizedContext = {
-  ctx: KoaContext;
-  user: User;
+	ctx: KoaContext;
+	user: User;
 };
 
 export type UnauthorizedContext = {
-  ctx: KoaContext;
-  user?: null;
+	ctx: KoaContext;
+	user?: null;
 };
 
 export type Context = AuthorizedContext | UnauthorizedContext;
