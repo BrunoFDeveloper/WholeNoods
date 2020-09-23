@@ -3,12 +3,16 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type SignInMutationVariables = {
+export type SignInInput = {
     email: string;
     password: string;
 };
+export type SignInMutationVariables = {
+    input: SignInInput;
+};
 export type SignInMutationResponse = {
     readonly signIn: {
+        readonly ok: boolean;
         readonly requiresTOTP: boolean;
     };
 };
@@ -21,10 +25,10 @@ export type SignInMutation = {
 
 /*
 mutation SignInMutation(
-  $email: String!
-  $password: String!
+  $input: SignInInput!
 ) {
-  signIn(email: $email, password: $password) {
+  signIn(input: $input) {
+    ok
     requiresTOTP
   }
 }
@@ -35,12 +39,7 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "email"
-  },
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "password"
+    "name": "input"
   }
 ],
 v1 = [
@@ -49,13 +48,8 @@ v1 = [
     "args": [
       {
         "kind": "Variable",
-        "name": "email",
-        "variableName": "email"
-      },
-      {
-        "kind": "Variable",
-        "name": "password",
-        "variableName": "password"
+        "name": "input",
+        "variableName": "input"
       }
     ],
     "concreteType": "SignInResult",
@@ -63,6 +57,13 @@ v1 = [
     "name": "signIn",
     "plural": false,
     "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "ok",
+        "storageKey": null
+      },
       {
         "alias": null,
         "args": null,
@@ -92,14 +93,14 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "cfdae84eb39f844738b3ee7e0600e2f9",
+    "cacheID": "b40e5688155f2bca2a17b63ed0335735",
     "id": null,
     "metadata": {},
     "name": "SignInMutation",
     "operationKind": "mutation",
-    "text": "mutation SignInMutation(\n  $email: String!\n  $password: String!\n) {\n  signIn(email: $email, password: $password) {\n    requiresTOTP\n  }\n}\n"
+    "text": "mutation SignInMutation(\n  $input: SignInInput!\n) {\n  signIn(input: $input) {\n    ok\n    requiresTOTP\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'e0480cacc6f0e2a1ec833475f284477f';
+(node as any).hash = '9553222d2c8f0e5775a568b11238ce55';
 export default node;

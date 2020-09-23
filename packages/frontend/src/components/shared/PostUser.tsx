@@ -11,13 +11,14 @@ export default function PostUser({ user }: Props) {
       fragment PostUser_user on User {
         id
         name
+        username
       }
     `,
     user
   );
 
   return (
-    <Link to={`/profiles/${data.id}`} className="flex items-center">
+    <Link to={`/profiles/${data.username}`} className="flex items-center">
       <div className="rounded-full h-8 w-8 bg-red-300 mr-4" />
       <div className="text-gray-900 font-semibold">{data.name}</div>
     </Link>

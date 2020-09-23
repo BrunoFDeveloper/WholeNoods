@@ -11,6 +11,7 @@ function HeaderUserLinks() {
         viewer {
           id
           name
+          username
         }
       }
     `,
@@ -18,7 +19,7 @@ function HeaderUserLinks() {
   );
 
   return data.viewer ? (
-    <Link className="font-bold text-lg" to={`/profiles/${data.viewer.id}`}>
+    <Link className="font-bold text-lg" to={`/profiles/${data.viewer.username}`}>
       <Underline>{data.viewer.name}</Underline>
     </Link>
   ) : (

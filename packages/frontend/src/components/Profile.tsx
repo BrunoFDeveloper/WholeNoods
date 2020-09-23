@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import Header from './shared/Header';
-import Button from './shared/Button';
+import Button from './ui/Button';
 import Post from './shared/Post';
 import { graphql, useLazyLoadQuery, useMutation } from 'react-relay/hooks';
 import { ProfileQuery } from './__generated__/ProfileQuery.graphql';
@@ -19,8 +19,8 @@ export default function Profile() {
 	const params = useParams();
 	const data = useLazyLoadQuery<ProfileQuery>(
 		graphql`
-			query ProfileQuery($id: ID!) {
-				user(id: $id) {
+			query ProfileQuery($username: String!) {
+				user(username: $username) {
 					id
 					name
 					bio
@@ -39,7 +39,7 @@ export default function Profile() {
 			}
 		`,
 		{
-			id: params.id,
+			username: params.username,
 		},
 	);
 

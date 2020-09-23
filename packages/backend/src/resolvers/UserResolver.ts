@@ -12,16 +12,19 @@ import {
 	Root,
 } from 'type-graphql';
 import { Post } from '../entities/Post';
-import { User, UserType } from '../entities/User';
+import { User } from '../entities/User';
 import { AuthorizedContext } from '../types';
-import CurrentUserOnly from '../utils/CurrentUserOnly';
 
 @Resolver(() => User)
 export class UserResolver {
 	@Authorized()
 	@Query(() => User)
-	user(@Arg('id', () => ID) id: string) {
-		return User.findOneOrFail(id);
+	user(@Arg('username') username: string) {
+		return User.findOneOrFail({
+			where: {
+				username,
+			},
+		});
 	}
 
 	@Authorized()
@@ -33,13 +36,7 @@ export class UserResolver {
 		return user.canViewPosts(rootUser);
 	}
 
-	@Authorized()
-	@CurrentUserOnly()
-	@FieldResolver(() => String)
-	legalName(@Root() user: User) {
-		return user.legalName;
-	}
-
+	// TODO: Implement this better.
 	@Authorized()
 	@FieldResolver(() => [Post])
 	async posts(@Root() rootUser: User, @Ctx() { user }: AuthorizedContext) {

@@ -3,10 +3,13 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type SignUpMutationVariables = {
-    name: string;
+export type SignUpInput = {
     email: string;
+    name: string;
     password: string;
+};
+export type SignUpMutationVariables = {
+    input: SignUpInput;
 };
 export type SignUpMutationResponse = {
     readonly signUp: {
@@ -22,50 +25,30 @@ export type SignUpMutation = {
 
 /*
 mutation SignUpMutation(
-  $name: String!
-  $email: String!
-  $password: String!
+  $input: SignUpInput!
 ) {
-  signUp(name: $name, email: $email, password: $password) {
+  signUp(input: $input) {
     ok
   }
 }
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "email"
-},
-v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "name"
-},
-v2 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "password"
-},
-v3 = [
+var v0 = [
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "input"
+  }
+],
+v1 = [
   {
     "alias": null,
     "args": [
       {
         "kind": "Variable",
-        "name": "email",
-        "variableName": "email"
-      },
-      {
-        "kind": "Variable",
-        "name": "name",
-        "variableName": "name"
-      },
-      {
-        "kind": "Variable",
-        "name": "password",
-        "variableName": "password"
+        "name": "input",
+        "variableName": "input"
       }
     ],
     "concreteType": "Result",
@@ -86,38 +69,30 @@ v3 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/),
-      (v2/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "SignUpMutation",
-    "selections": (v3/*: any*/),
+    "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/),
-      (v2/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "SignUpMutation",
-    "selections": (v3/*: any*/)
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "c9f808897a96643670cedb2d3fa1146c",
+    "cacheID": "b2e13e54e45ab9560374b060b8867e39",
     "id": null,
     "metadata": {},
     "name": "SignUpMutation",
     "operationKind": "mutation",
-    "text": "mutation SignUpMutation(\n  $name: String!\n  $email: String!\n  $password: String!\n) {\n  signUp(name: $name, email: $email, password: $password) {\n    ok\n  }\n}\n"
+    "text": "mutation SignUpMutation(\n  $input: SignUpInput!\n) {\n  signUp(input: $input) {\n    ok\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'e22952a91f0a167665f16a865ccd1e17';
+(node as any).hash = '23a4fb7e2cf388b7e988b897e32f9cea';
 export default node;

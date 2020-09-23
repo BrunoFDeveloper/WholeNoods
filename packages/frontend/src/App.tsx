@@ -26,7 +26,7 @@ export default function App() {
 							<Route path="/signup">
 								<SignUp />
 							</Route>
-							<Route path="/profiles/:id">
+							<Route path="/profiles/:username">
 								<Profile />
 							</Route>
 							<Route path="/messages">

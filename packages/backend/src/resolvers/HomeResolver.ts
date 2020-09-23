@@ -15,6 +15,8 @@ import { AuthorizedContext } from "../types";
 class HomePage {
   @Field(() => [Post])
   posts!: Post[];
+
+  // suggestions
 }
 
 @Resolver()

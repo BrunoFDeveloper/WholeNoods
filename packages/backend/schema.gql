@@ -53,8 +53,8 @@ type Mutation {
   createPost(input: CreatePostInput!): Post!
   favoritePost(input: FavoritePostInput!): Post!
   pinPost(input: PinPostInput!): Post!
-  signIn(email: String!, password: String!): SignInResult!
-  signUp(email: String!, name: String!, password: String!): Result!
+  signIn(input: SignInInput!): SignInResult!
+  signUp(input: SignUpInput!): Result!
   subscribe(user: ID!): User!
 }
 
@@ -63,6 +63,7 @@ input PinPostInput {
 }
 
 type Post {
+  comments: [PostComment!]!
   createdAt: DateTime!
   favoritesCount: Int!
   hasFavorited: Boolean!
@@ -73,6 +74,12 @@ type Post {
   updatedAt: DateTime!
   user: User!
   visibility: PostVisibility!
+}
+
+type PostComment {
+  createdAt: DateTime!
+  id: ID!
+  updatedAt: DateTime!
 }
 
 type PostMedia {
@@ -92,7 +99,7 @@ enum PostVisibility {
 type Query {
   home: HomePage!
   messageThreads: [MessageThread!]!
-  user(id: ID!): User!
+  user(username: String!): User!
   viewer: User
 }
 
@@ -100,9 +107,20 @@ type Result {
   ok: Boolean!
 }
 
+input SignInInput {
+  email: String!
+  password: String!
+}
+
 type SignInResult {
   ok: Boolean!
   requiresTOTP: Boolean!
+}
+
+input SignUpInput {
+  email: String!
+  name: String!
+  password: String!
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -114,7 +132,6 @@ type User {
   email: String!
   id: ID!
   isCurrentlySubscribed: Boolean!
-  legalName: String!
   location: String!
   name: String!
   pinnedPost: Post

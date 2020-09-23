@@ -40,6 +40,7 @@ query HomeQuery {
 fragment PostUser_user on User {
   id
   name
+  username
 }
 
 fragment Post_post on Post {
@@ -219,6 +220,13 @@ return {
                     "kind": "ScalarField",
                     "name": "name",
                     "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "username",
+                    "storageKey": null
                   }
                 ],
                 "storageKey": null
@@ -232,12 +240,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ffe37afc0c8e35f9f9c193798e931abb",
+    "cacheID": "b36a79ee52b8b5a6afe412ad5e88126e",
     "id": null,
     "metadata": {},
     "name": "HomeQuery",
     "operationKind": "query",
-    "text": "query HomeQuery {\n  home {\n    posts {\n      id\n      ...Post_post\n      user {\n        ...PostUser_user\n        id\n      }\n    }\n  }\n}\n\nfragment PostUser_user on User {\n  id\n  name\n}\n\nfragment Post_post on Post {\n  id\n  title\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  media {\n    url\n    type\n    id\n  }\n}\n"
+    "text": "query HomeQuery {\n  home {\n    posts {\n      id\n      ...Post_post\n      user {\n        ...PostUser_user\n        id\n      }\n    }\n  }\n}\n\nfragment PostUser_user on User {\n  id\n  name\n  username\n}\n\nfragment Post_post on Post {\n  id\n  title\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  media {\n    url\n    type\n    id\n  }\n}\n"
   }
 };
 })();

@@ -1,20 +1,26 @@
-import { forwardRef } from "react";
+import clsx from 'clsx';
+import { forwardRef } from 'react';
 
 export type Props = {
-  label: string;
-} & React.ComponentProps<"input">;
+	label: string;
+} & React.ComponentProps<'input'>;
 
 export default forwardRef<HTMLInputElement, Props>(
-  ({ label, ...props }, ref) => {
-    return (
-      <label className="block">
-        <div className="font-semibold mb-1">{label}</div>
-        <input
-          className="bg-transparent focus:bg-white transition duration-150 border border-green-700 rounded-sm focus:outline-none px-5 py-2 text-lg w-full"
-          ref={ref}
-          {...props}
-        />
-      </label>
-    );
-  }
+	({ label, ...props }, ref) => {
+		return (
+			<label className="block text-sm font-medium leading-5 text-gray-700">
+				{label}
+				<div className="mt-1 relative rounded-md shadow-sm">
+					<input
+						className={clsx(
+							'form-input block w-full sm:text-sm sm:leading-5',
+							props.disabled && 'bg-gray-100',
+						)}
+						ref={ref}
+						{...props}
+					/>
+				</div>
+			</label>
+		);
+	},
 );

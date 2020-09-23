@@ -1,4 +1,3 @@
-import groupBy from "lodash/groupBy";
 import { ObjectType } from "type-graphql";
 import { Entity, In, ManyToOne, RelationId, Unique } from "typeorm";
 import { Lazy } from "../types";

@@ -6,7 +6,7 @@ import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type UserType = "CREATOR" | "VIEWER" | "%future added value";
 export type ProfileQueryVariables = {
-    id: string;
+    username: string;
 };
 export type ProfileQueryResponse = {
     readonly user: {
@@ -35,9 +35,9 @@ export type ProfileQuery = {
 
 /*
 query ProfileQuery(
-  $id: ID!
+  $username: String!
 ) {
-  user(id: $id) {
+  user(username: $username) {
     id
     name
     bio
@@ -60,6 +60,7 @@ query ProfileQuery(
 fragment PostUser_user on User {
   id
   name
+  username
 }
 
 fragment Post_post on Post {
@@ -82,14 +83,14 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "id"
+    "name": "username"
   }
 ],
 v1 = [
   {
     "kind": "Variable",
-    "name": "id",
-    "variableName": "id"
+    "name": "username",
+    "variableName": "username"
   }
 ],
 v2 = {
@@ -284,6 +285,13 @@ return {
           {
             "alias": null,
             "args": null,
+            "kind": "ScalarField",
+            "name": "username",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
             "concreteType": "Post",
             "kind": "LinkedField",
             "name": "pinnedPost",
@@ -307,14 +315,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0efde03021c41b00235b66a831ad4a01",
+    "cacheID": "b7392daa1e5f1bfc156832f5694f7757",
     "id": null,
     "metadata": {},
     "name": "ProfileQuery",
     "operationKind": "query",
-    "text": "query ProfileQuery(\n  $id: ID!\n) {\n  user(id: $id) {\n    id\n    name\n    bio\n    type\n    postsCount\n    subscribersCount\n    isCurrentlySubscribed\n    ...PostUser_user\n    pinnedPost {\n      ...Post_post\n      id\n    }\n    posts {\n      ...Post_post\n      id\n    }\n  }\n}\n\nfragment PostUser_user on User {\n  id\n  name\n}\n\nfragment Post_post on Post {\n  id\n  title\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  media {\n    url\n    type\n    id\n  }\n}\n"
+    "text": "query ProfileQuery(\n  $username: String!\n) {\n  user(username: $username) {\n    id\n    name\n    bio\n    type\n    postsCount\n    subscribersCount\n    isCurrentlySubscribed\n    ...PostUser_user\n    pinnedPost {\n      ...Post_post\n      id\n    }\n    posts {\n      ...Post_post\n      id\n    }\n  }\n}\n\nfragment PostUser_user on User {\n  id\n  name\n  username\n}\n\nfragment Post_post on Post {\n  id\n  title\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  media {\n    url\n    type\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '8c8296d00e58b821dcb48592fdbf05fb';
+(node as any).hash = 'f81fac7e4fcc85d69535f25043259de9';
 export default node;

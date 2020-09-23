@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Header from './shared/Header';
-import Button from './shared/Button';
+import Button from './ui/Button';
 import Toggle from './shared/Toggle';
 import { useNavigate } from 'react-router-dom';
 import UploadFiles, { FileWithPreview } from './CreatePost/UploadFiles';
