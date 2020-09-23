@@ -22,6 +22,7 @@
     "react": "^0.0.0-experimental-94c0244ba",
     "react-dom": "^0.0.0-experimental-94c0244ba",
     "react-dropzone": "^11.2.0",
+    "react-hook-form": "^6.8.4",
     "react-relay": "^0.0.0-experimental-183bdd28",
     "react-relay-network-modern": "^5.0.0",
     "react-router": "^5.2.0",
