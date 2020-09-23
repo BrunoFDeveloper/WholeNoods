@@ -12,10 +12,7 @@ import { User } from './entities/User';
 import { Context, KoaContext } from './types';
 import { ApolloServerLoaderPlugin } from 'type-graphql-dataloader';
 import { run } from './utils/currentRequest';
-
-const COOKIE_NAME = 'wholenoods.cookie';
-const COOKIE_SECRET = 'replace-before-prod';
-const MAX_COMPLEXITY = 50;
+import { COOKIE_NAME, COOKIE_SECRET, MAX_COMPLEXITY, MAX_DEPTH } from './config';
 
 async function main() {
 	await createConnection(require('../ormconfig.js'));
@@ -92,7 +89,7 @@ async function main() {
 		async context({ ctx }): Promise<Context> {
 			return ctx.context;
 		},
-		validationRules: [depthLimit(6)],
+		validationRules: [depthLimit(MAX_DEPTH)],
 	});
 
 	server.applyMiddleware({ app, path: '/api/graphql' });

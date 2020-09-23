@@ -11,10 +11,9 @@ import { getCurrentRequest } from '../utils/currentRequest';
 import { MessageThreadParticipant } from './MessageThreadParticipant';
 import { ApplicationStatus, CreatorApplication } from './CreatorApplication';
 import { CreatorInformation } from './CreatorInformation';
+import { MAX_CREATOR_APPLICATIONS } from '../config';
 
 const securePassword = new SecurePassword();
-
-const MAX_APPLICATIONS = 5;
 
 export enum UserType {
 	VIEWER,
@@ -205,7 +204,7 @@ export class User extends ExternalEntity {
 			},
 		});
 
-		if (applicationsCount > MAX_APPLICATIONS) {
+		if (applicationsCount > MAX_CREATOR_APPLICATIONS) {
 			throw new Error(
 				'You have exceeded the maximum amount of applications. Please contact support if you would like to apply again.',
 			);
