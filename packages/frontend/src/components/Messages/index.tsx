@@ -1,30 +1,23 @@
+import { Routes, Route, useParams } from 'react-router-dom';
+import MessageList from './MessageList';
 import Threads from './Threads';
+import Composer from './Composer';
 
-function InMessage() {
+function MessagesLayout() {
+	const params = useParams();
+
 	return (
-		<div className="p-4">
-			<div className="flex items-end space-x-4">
-				<div className="h-6 p-6 bg-red-400 rounded-full" />
-				<div className="bg-gray-100 rounded p-4 prose">
-					This is a test for a very long message This is a test for a very long
-					message This is a test for a very long message This is a test for a
-					very long message This is a test for a very long message
-				</div>
+		<div className="flex flex-1 overflow-hidden container mx-auto">
+			<div className="w-64 bg-gray-900 border-gray-800 border-r">
+				<Threads />
 			</div>
-		</div>
-	);
-}
-
-function OutMessage() {
-	return (
-		<div className="p-4">
-			<div className="flex justify-end items-end space-x-4">
-				<div className="bg-indigo-600 text-white rounded p-4 prose">
-					This is a test for a very long message This is a test for a very long
-					message This is a test for a very long message This is a test for a
-					very long message This is a test for a very long message
-				</div>
-				<div className="h-6 p-6 bg-red-400 rounded-full" />
+			<div className="flex-1 flex flex-col">
+				{params.id && (
+					<>
+						<MessageList />
+						<Composer />
+					</>
+				)}
 			</div>
 		</div>
 	);
@@ -32,14 +25,9 @@ function OutMessage() {
 
 export default function Messages() {
 	return (
-		<div className="flex">
-			<div className="w-64 bg-gray-100 border-r border-gray-200 min-h-screen">
-				<Threads />
-			</div>
-			<div className="flex-1">
-				<InMessage />
-				<OutMessage />
-			</div>
-		</div>
+		<Routes>
+			<Route path=":id" element={<MessagesLayout />} />
+			<Route path="/" element={<MessagesLayout />} />
+		</Routes>
 	);
 }

@@ -6,6 +6,7 @@ import { SignUpMutation } from './__generated__/SignUpMutation.graphql';
 import Form, { Values } from './forms/Form';
 import Input from './forms/Input';
 import SubmitButton from './forms/SubmitButton';
+import Heading from './ui/Heading';
 
 export default function SignUp() {
 	const navigate = useNavigate();
@@ -22,9 +23,11 @@ export default function SignUp() {
 	async function handleSubmit(values: Values) {
 		commit({
 			variables: {
-				name: values.name,
-				email: values.email,
-				password: values.password,
+				input: {
+					name: values.name,
+					email: values.email,
+					password: values.password,
+				},
 			},
 			onCompleted() {
 				store.user.setIsSignedIn(true);
@@ -34,9 +37,9 @@ export default function SignUp() {
 	}
 
 	return (
-		<div className="bg-gray-200 py-12">
+		<div className="py-12">
 			<div className="w-96 mx-auto">
-				<h1 className="font-serif font-semibold text-4xl mb-6">Sign up.</h1>
+				<Heading>Sign up.</Heading>
 				<Form
 					onSubmit={handleSubmit}
 					disabled={isInFlight}

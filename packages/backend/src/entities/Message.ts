@@ -1,5 +1,5 @@
 import { Field, ObjectType } from 'type-graphql';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, RelationId } from 'typeorm';
 import { Lazy } from '../types';
 import { ExternalEntity } from './BaseEntity';
 import { MessageThread } from './MessageThread';
@@ -14,6 +14,9 @@ export class Message extends ExternalEntity {
 	@Field(() => User)
 	@ManyToOne(() => User, { lazy: true })
 	user!: Lazy<User>;
+
+	@RelationId((message: Message) => message.user)
+	userId!: string;
 
 	@Field()
 	@Column()

@@ -1,15 +1,14 @@
-import { Link as RouterLink } from "react-router-dom";
-import Underline from "./Underline";
+import { Link as RouterLink } from 'react-router-dom';
 
 type Props = {
-  to: string;
-  children: React.ReactNode;
+	to: string;
+	children: React.ReactNode;
 };
 
 export default function Link({ to, children }: Props) {
-  return (
-    <RouterLink className="text-green-700 text-lg font-semibold" to={to}>
-      <Underline>{children}</Underline>
-    </RouterLink>
-  );
+	return (
+		<RouterLink className="text-teal-200 font-semibold" to={to}>
+			{children}
+		</RouterLink>
+	);
 }

@@ -29,9 +29,7 @@ export default function App() {
 							<Route path="/profiles/:username">
 								<Profile />
 							</Route>
-							<Route path="/messages">
-								<Messages />
-							</Route>
+							<Route path="/messages/*" element={<Messages />} />
 							<Route path="/posts/create">
 								<ComposePost />
 							</Route>

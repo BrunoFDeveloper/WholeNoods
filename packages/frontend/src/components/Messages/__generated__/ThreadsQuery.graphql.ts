@@ -27,6 +27,7 @@ query ThreadsQuery {
 }
 
 fragment Thread_messageThread on MessageThread {
+  id
   participants {
     user {
       id
@@ -148,12 +149,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3aec21896b0ea98947005e5a50b29fb2",
+    "cacheID": "0f79050974e8e673944819a21154487c",
     "id": null,
     "metadata": {},
     "name": "ThreadsQuery",
     "operationKind": "query",
-    "text": "query ThreadsQuery {\n  messageThreads {\n    id\n    ...Thread_messageThread\n  }\n}\n\nfragment Thread_messageThread on MessageThread {\n  participants {\n    user {\n      id\n      name\n    }\n    id\n  }\n  lastMessage {\n    id\n    text\n  }\n}\n"
+    "text": "query ThreadsQuery {\n  messageThreads {\n    id\n    ...Thread_messageThread\n  }\n}\n\nfragment Thread_messageThread on MessageThread {\n  id\n  participants {\n    user {\n      id\n      name\n    }\n    id\n  }\n  lastMessage {\n    id\n    text\n  }\n}\n"
   }
 };
 })();

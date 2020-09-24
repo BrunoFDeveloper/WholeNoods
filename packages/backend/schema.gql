@@ -25,6 +25,7 @@ type HomePage {
 
 type Message {
   createdAt: DateTime!
+  fromViewer: Boolean!
   id: ID!
   text: String!
   updatedAt: DateTime!
@@ -53,6 +54,7 @@ type Mutation {
   createPost(input: CreatePostInput!): Post!
   favoritePost(input: FavoritePostInput!): Post!
   pinPost(input: PinPostInput!): Post!
+  sendMessage(input: SendMessageInput!): Message!
   signIn(input: SignInInput!): SignInResult!
   signUp(input: SignUpInput!): Result!
   subscribe(user: ID!): User!
@@ -98,6 +100,7 @@ enum PostVisibility {
 
 type Query {
   home: HomePage!
+  messageThread(id: ID!): MessageThread!
   messageThreads: [MessageThread!]!
   user(username: String!): User!
   viewer: User
@@ -105,6 +108,11 @@ type Query {
 
 type Result {
   ok: Boolean!
+}
+
+input SendMessageInput {
+  messageThreadId: ID!
+  text: String!
 }
 
 input SignInInput {

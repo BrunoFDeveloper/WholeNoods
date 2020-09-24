@@ -1,5 +1,6 @@
 import { AuthResolver } from './AuthResolver';
 import { HomeResolver } from './HomeResolver';
+import { MessageResolver } from './MessageResolver';
 import { MessageThreadResolver } from './MessageThreadResolver';
 import { PostResolver } from './PostResolver';
 import { SubscriptionResolver } from './SubscriptionResolver';
@@ -12,4 +13,5 @@ export default [
 	SubscriptionResolver,
 	PostResolver,
 	MessageThreadResolver,
+	MessageResolver,
 ] as const;

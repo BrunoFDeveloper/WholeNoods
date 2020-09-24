@@ -8,12 +8,12 @@ export type Props = {
 export default forwardRef<HTMLInputElement, Props>(
 	({ label, ...props }, ref) => {
 		return (
-			<label className="block text-sm font-medium leading-5 text-gray-700">
+			<label className="block text-sm font-medium leading-5 text-gray-100">
 				{label}
-				<div className="mt-1 relative rounded-md shadow-sm">
+				<div className="mt-1 relative">
 					<input
 						className={clsx(
-							'form-input block w-full sm:text-sm sm:leading-5',
+							'form-input block w-full sm:text-sm sm:leading-5 border-0 rounded',
 							props.disabled && 'bg-gray-100',
 						)}
 						ref={ref}

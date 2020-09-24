@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { useMst } from '../models';
 import { graphql, useMutation } from 'react-relay/hooks';
 import { SignInMutation } from './__generated__/SignInMutation.graphql';
+import Heading from './ui/Heading';
 import Form, { Values } from './forms/Form';
 import Input from './forms/Input';
 import SubmitButton from './forms/SubmitButton';
@@ -35,9 +36,9 @@ export default function SignIn() {
 	}
 
 	return (
-		<div className="bg-gray-200 py-12">
+		<div className="py-12">
 			<div className="w-96 mx-auto">
-				<h1 className="font-serif font-semibold text-4xl mb-6">Sign in.</h1>
+				<Heading>Sign in.</Heading>
 				<Form
 					disabled={isInFlight}
 					onSubmit={handleSubmit}

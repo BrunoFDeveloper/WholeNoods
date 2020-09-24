@@ -17,7 +17,6 @@ async function main() {
 			email: 'admin@vapejuicejordan.rip',
 			name: 'Jordan',
 			bio: 'I created this site, what else do you want to know?',
-			type: UserType.CREATOR,
 		});
 
 		await user.setPassword('admin');

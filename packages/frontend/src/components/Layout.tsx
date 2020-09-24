@@ -1,17 +1,15 @@
-import { Suspense } from "react";
-import Header from "./Header";
+import { Suspense } from 'react';
+import Header from './Header';
 
 type Props = {
-  children: React.ReactNode;
+	children: React.ReactNode;
 };
 
 export default function Layout({ children }: Props) {
-  return (
-    <div>
-      <Header />
-      <Suspense fallback="TODO: Real fallback UI">
-        {children}
-      </Suspense>
-    </div>
-  );
+	return (
+		<div className="flex flex-col h-full">
+			<Header />
+			<Suspense fallback="TODO: Real fallback UI">{children}</Suspense>
+		</div>
+	);
 }

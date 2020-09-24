@@ -59,8 +59,6 @@ export class AuthResolver {
 
 	@Mutation(() => SignInResult)
 	async signIn(@Arg('input') input: SignInInput) {
-		await new Promise((resolve) => setTimeout(resolve, 5000));
-
 		const user = await User.findOneOrFail({
 			where: {
 				email: input.email,

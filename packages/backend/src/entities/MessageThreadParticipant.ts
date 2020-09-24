@@ -22,12 +22,12 @@ export class MessageThreadParticipant extends ExternalEntity {
 	threadId!: string;
 
 	@Field(() => User)
-	@ManyToOne(() => User, (user) => user.threads)
+	@ManyToOne(() => User, (user) => user.threads, { lazy: true })
 	@TypeormLoader(
 		() => MessageThreadParticipant,
 		(participant: MessageThreadParticipant) => participant.userId,
 	)
-	user!: User;
+	user!: Lazy<User>;
 
 	@RelationId((participant: MessageThreadParticipant) => participant.user)
 	userId!: string;
