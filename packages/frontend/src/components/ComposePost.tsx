@@ -2,10 +2,13 @@ import { useState } from 'react';
 import Header from './shared/Header';
 import Button from './ui/Button';
 import Toggle from './shared/Toggle';
+import Form, { Values } from './forms/Form';
+import Input from './forms/Input';
 import { useNavigate } from 'react-router-dom';
 import UploadFiles, { FileWithPreview } from './CreatePost/UploadFiles';
 import { graphql, useMutation } from 'react-relay/hooks';
 import { ComposePostMutation } from './__generated__/ComposePostMutation.graphql';
+import TextArea from './ui/TextArea';
 
 export default function ComposePost() {
 	const navigate = useNavigate();
@@ -21,16 +24,12 @@ export default function ComposePost() {
 		}
 	`);
 
-	async function createPost(e: React.FormEvent<HTMLFormElement>) {
-		e.preventDefault();
-
-		const formData = new FormData(e.currentTarget);
-
+	async function createPost(values: Values) {
 		commit({
 			variables: {
 				input: {
-					title: formData.get('title') as string,
-					text: formData.get('text') as string,
+					title: values.title,
+					text: values.text,
 					visibility: isPublic
 						? 'PUBLIC'
 						: isPreview
@@ -48,30 +47,12 @@ export default function ComposePost() {
 	return (
 		<div className="container mx-auto mt-6">
 			<div className="max-w-lg mx-auto bg-gray-200 p-8 rounded">
-				<form onSubmit={createPost} className="flex flex-col space-y-4">
+				<Form onSubmit={createPost} className="flex flex-col space-y-4">
 					<Header>New Post</Header>
 
-					<label className="block text-sm font-medium leading-5 text-gray-700">
-						Post Title
-						<div className="mt-1 relative rounded-md shadow-sm">
-							<input
-								name="title"
-								className="form-input block w-full sm:text-sm sm:leading-5"
-								placeholder="Title..."
-							/>
-						</div>
-					</label>
+					<Input label="Post Title" name="title" />
 
-					<label className="block text-sm font-medium leading-5 text-gray-700">
-						Post Text
-						<div className="mt-1 relative rounded-md shadow-sm">
-							<textarea
-								name="text"
-								rows={3}
-								className="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-							/>
-						</div>
-					</label>
+					<TextArea label="Post Text" name="text" />
 
 					<label className="text-sm font-medium leading-5 text-gray-700 flex items-center justify-between">
 						Public Post
@@ -96,7 +77,7 @@ export default function ComposePost() {
 					<div className="mt-4 flex justify-end">
 						<Button type="submit">Create Post</Button>
 					</div>
-				</form>
+				</Form>
 			</div>
 		</div>
 	);

@@ -1,4 +1,4 @@
-import Link from './shared/Link';
+import Link from './ui/Link';
 import { useNavigate } from 'react-router';
 import { useMst } from '../models';
 import { graphql, useMutation } from 'react-relay/hooks';

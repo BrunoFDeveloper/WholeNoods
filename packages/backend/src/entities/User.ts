@@ -1,5 +1,13 @@
 import { Field, ObjectType, registerEnumType } from 'type-graphql';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import {
+	BeforeInsert,
+	BeforeUpdate,
+	Column,
+	Entity,
+	JoinColumn,
+	OneToMany,
+	OneToOne,
+} from 'typeorm';
 import { authenticator } from 'otplib';
 import SecurePassword from 'secure-password';
 import { Post } from './Post';
@@ -180,17 +188,32 @@ export class User extends ExternalEntity {
 		ctx.session.type = type;
 	}
 
-	async canViewPosts(otherUser: User) {
+	isCreator() {
+		return this.type !== UserType.CREATOR;
+	}
+
+	private subscribedCache = new WeakMap<User, boolean>();
+	async isSubscribedTo(otherUser: User) {
 		if (otherUser.id === this.id) {
 			return true;
 		}
 
-		const subscription = await Subscription.findOne({
+		if (!otherUser.isCreator()) {
+			return false;
+		}
+
+		if (this.subscribedCache.has(otherUser)) {
+			return this.subscribedCache.get(otherUser);
+		}
+
+		const isSubscribed = !!(await Subscription.findOne({
 			fromUser: this,
 			toUser: otherUser,
-		});
+		}));
 
-		return !!subscription;
+		this.subscribedCache.set(otherUser, isSubscribed);
+
+		return isSubscribed;
 	}
 
 	async applyToCreator() {

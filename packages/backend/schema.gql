@@ -81,6 +81,7 @@ type Post {
 type PostComment {
   createdAt: DateTime!
   id: ID!
+  text: String!
   updatedAt: DateTime!
 }
 

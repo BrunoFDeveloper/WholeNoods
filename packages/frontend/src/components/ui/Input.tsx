@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { forwardRef } from 'react';
+import GradBar from './GradBar';
 
 export type Props = {
 	label: string;
@@ -13,12 +14,13 @@ export default forwardRef<HTMLInputElement, Props>(
 				<div className="mt-1 relative">
 					<input
 						className={clsx(
-							'form-input block w-full sm:text-sm sm:leading-5 border-0 rounded',
+							'form-input block w-full sm:text-sm sm:leading-5 border-0 rounded rounded-b-none text-gray-900',
 							props.disabled && 'bg-gray-100',
 						)}
 						ref={ref}
 						{...props}
 					/>
+					<GradBar />
 				</div>
 			</label>
 		);

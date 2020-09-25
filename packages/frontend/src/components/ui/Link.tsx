@@ -7,7 +7,7 @@ type Props = {
 
 export default function Link({ to, children }: Props) {
 	return (
-		<RouterLink className="text-teal-200 font-semibold" to={to}>
+		<RouterLink className="text-indigo-500 font-semibold" to={to}>
 			{children}
 		</RouterLink>
 	);

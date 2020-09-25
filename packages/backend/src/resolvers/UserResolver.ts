@@ -11,8 +11,9 @@ import {
 	Resolver,
 	Root,
 } from 'type-graphql';
-import { Post } from '../entities/Post';
-import { User } from '../entities/User';
+import { In } from 'typeorm';
+import { Post, PostVisibility } from '../entities/Post';
+import { User, UserType } from '../entities/User';
 import { AuthorizedContext } from '../types';
 
 @Resolver(() => User)
@@ -33,28 +34,51 @@ export class UserResolver {
 		@Root() rootUser: User,
 		@Ctx() { user }: AuthorizedContext,
 	) {
-		return user.canViewPosts(rootUser);
+		return user.isSubscribedTo(rootUser);
 	}
 
-	// TODO: Implement this better.
 	@Authorized()
 	@FieldResolver(() => [Post])
-	async posts(@Root() rootUser: User, @Ctx() { user }: AuthorizedContext) {
-		if (!(await user.canViewPosts(rootUser))) {
+	async posts(@Root() root: User, @Ctx() { user }: AuthorizedContext) {
+		// Only creators can post, so save us some time:
+		if (!root.isCreator()) {
 			return [];
 		}
 
-		return rootUser.posts;
+		const subscribed = await user.isSubscribedTo(root);
+
+		const posts = await Post.find({
+			where: {
+				user: root,
+				visibility: subscribed
+					? In([
+							PostVisibility.PUBLIC,
+							PostVisibility.PRIVATE,
+							PostVisibility.PRIVATE_PREVIEW,
+					  ])
+					: In([PostVisibility.PUBLIC, PostVisibility.PRIVATE_PREVIEW]),
+			},
+		});
+
+		return posts;
 	}
 
 	@FieldResolver(() => Int)
-	postsCount(@Root() user: User) {
-		return user.getPostsCount();
+	postsCount(@Root() root: User) {
+		if (!root.isCreator()) {
+			return 0;
+		}
+
+		return root.getPostsCount();
 	}
 
 	@FieldResolver(() => Int)
-	subscribersCount(@Root() user: User) {
-		return user.getSubscribersCount();
+	subscribersCount(@Root() root: User) {
+		if (!root.isCreator()) {
+			return 0;
+		}
+
+		return root.getSubscribersCount();
 	}
 
 	@Authorized()

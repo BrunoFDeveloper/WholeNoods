@@ -7,6 +7,7 @@ import { Favorite } from './Favorite';
 import { PostMedia } from './PostMedia';
 import { User } from './User';
 import { PostComment } from './PostComment';
+import truncate from 'lodash/truncate';
 
 export enum PostVisibility {
 	PUBLIC,
@@ -21,9 +22,24 @@ registerEnumType(PostVisibility, {
 @ObjectType()
 @Entity()
 export class Post extends ExternalEntity {
+	static async getForAction(id: string, user: User) {
+		const post = await Post.findOneOrFail(id, {
+			relations: ['user'],
+		});
+
+		if (!(await user.isSubscribedTo(await post.user))) {
+			throw new Error('You are not subscribed to this creator.');
+		}
+
+		return post;
+	}
+
 	@Field(() => PostVisibility)
 	@Column({ default: PostVisibility.PUBLIC })
 	visibility!: PostVisibility;
+
+	@Column({ default: true })
+	previewMedia!: boolean;
 
 	@Field({ nullable: true })
 	@Column({ nullable: true })
@@ -48,10 +64,14 @@ export class Post extends ExternalEntity {
 	@OneToMany(() => PostMedia, (media) => media.post, { lazy: true })
 	media!: Lazy<PostMedia[]>;
 
-	@Column({ default: true })
-	previewMedia!: boolean;
-
 	@Field(() => [PostComment])
 	@OneToMany(() => PostComment, (comment) => comment.post, { lazy: true })
 	comments!: Lazy<PostComment[]>;
+
+	async shoudDisplayPreview(user: User) {
+		return (
+			PostVisibility.PRIVATE_PREVIEW &&
+			!(await user.isSubscribedTo(await this.user))
+		);
+	}
 }
