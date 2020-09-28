@@ -1,14 +1,20 @@
 import { useParams } from 'react-router-dom';
-import Header from './shared/Header';
 import Button from './ui/Button';
-import Post from './shared/Post';
+import Post from './ui/Post';
 import { graphql, useLazyLoadQuery, useMutation } from 'react-relay/hooks';
 import { ProfileQuery } from './__generated__/ProfileQuery.graphql';
 import { ProfileSubscribeMutation } from './__generated__/ProfileSubscribeMutation.graphql';
+import Heading from './ui/Heading';
+import ProfileCard from './ui/ProfileCard';
+import GradBar from './ui/GradBar';
+import Tabs from './ui/Tabs';
+import { useState } from 'react';
+import FollowButton from './Profile/FollowButton';
+import SubscribeBox from './Profile/SubscribeBox';
 
 function Stat({ count, label }: { count: number; label: string }) {
 	return (
-		<div className="text-lg flex items-center">
+		<div className="text-lg flex items-center text-gray-400">
 			<span className="font-serif text-2xl font-semibold mr-2">{count}</span>
 			{label}
 		</div>
@@ -16,6 +22,7 @@ function Stat({ count, label }: { count: number; label: string }) {
 }
 
 export default function Profile() {
+	const [tab, setTab] = useState(0);
 	const params = useParams();
 	const data = useLazyLoadQuery<ProfileQuery>(
 		graphql`
@@ -23,12 +30,15 @@ export default function Profile() {
 				user(username: $username) {
 					id
 					name
+					username
 					bio
 					type
 					postsCount
 					subscribersCount
+					isViewer
 					isCurrentlySubscribed
-					...PostUser_user
+					isFollowing
+					...FollowButton_user
 					pinnedPost {
 						...Post_post
 					}
@@ -43,72 +53,57 @@ export default function Profile() {
 		},
 	);
 
-	const [commit] = useMutation<ProfileSubscribeMutation>(
-		graphql`
-			mutation ProfileSubscribeMutation($id: ID!) {
-				subscribe(user: $id) {
-					id
-					isCurrentlySubscribed
-				}
-			}
-		`,
-	);
-
 	return (
 		<div>
 			<div
-				className="h-48 bg-cover"
+				className="h-48 bg-cover relative"
 				style={{
 					backgroundImage:
 						'url(https://pbs.twimg.com/profile_banners/24228166/1373133489/1500x500)',
 				}}
-			/>
-			<div className="container mx-auto">
-				<div className="flex space-x-6">
-					<div className="-mt-16 rounded-full h-36 w-36 shadow-lg overflow-hidden border-4 border-white">
-						<img src="https://pbs.twimg.com/profile_images/1298717280876892160/DKx_ldOx_400x400.jpg" />
-					</div>
-					<div className="flex-1">
-						<div className="flex my-6">
-							<Header>{data.user.name}</Header>
-							<div className="flex space-x-6 ml-12">
-								<Stat count={data.user.postsCount} label="posts" />
-								<Stat count={data.user.subscribersCount} label="subscribers" />
+			>
+				<div className="inset w-full h-full bg-gradient-to-b from-transparent to-black opacity-25"></div>
+			</div>
+			<div className="container mx-auto px-4 md:px-0 relative">
+				<div className="flex flex-col md:flex-row md:space-x-6">
+					<div className="flex-1 flex md:space-x-6 flex-col md:flex-row">
+						<div className="-mt-10 z-10 mx-auto md:mx-0">
+							<ProfileCard
+								src="https://github.com/kesne.png"
+								size="large"
+								className="shadow-xl"
+							/>
+						</div>
+						<div className="flex-1 space-y-6">
+							<div className="flex items-start justify-between my-6">
+								<div>
+									<Heading size="h2">{data.user.name}</Heading>
+									<div className="text-gray-500 mt-2">
+										@{data.user.username}
+									</div>
+								</div>
+								{!data.user.isViewer && <FollowButton user={data.user} />}
+							</div>
+							{data.user.bio && (
+								<div className="text-gray-200 text-lg">{data.user.bio}</div>
+							)}
+							<Tabs
+								tabs={[<div>Posts</div>, <div>Media</div>]}
+								selectedIndex={tab}
+								onChange={setTab}
+							/>
+							<div className="space-y-6 mt-4">
+								{data.user.pinnedPost && <Post post={data.user.pinnedPost} />}
+								<div className="divide-y">
+									{data.user.posts.map((post) => (
+										<Post post={post} />
+									))}
+								</div>
 							</div>
 						</div>
-						<div className="text-gray-800 text-lg">
-							{data.user.bio || 'No user bio found.'}
-						</div>
-						<div className="space-y-6 mt-4">
-							{data.user.pinnedPost && <Post post={data.user.pinnedPost} />}
-							<div className="grid grid-cols-3 gap-4">
-								{data.user.posts.map((post) => (
-									<Post post={post} user={data.user} />
-								))}
-							</div>
-						</div>
 					</div>
-					<div className="bg-white -mt-16 shadow-lg p-6 w-80 rounded space-y-4 h-full">
-						<div className="text-center text-lg text-gray-700">
-							Become a subscriber
-						</div>
-						<div className="flex items-center justify-center">
-							<span className="text-4xl font-serif font-bold">$20</span>
-							<span className="text-gray-500 ml-1">/ mo</span>
-						</div>
-						<div className="flex justify-center">
-							<Button
-								onClick={() =>
-									commit({
-										variables: {
-											id: data.user.id,
-										},
-									})
-								}
-							>
-								Subscribe
-							</Button>
-						</div>
+					<div className="sticky bottom-6 px-2 p-0 md:top-6 h-full md:-mt-10">
+						<SubscribeBox />
 					</div>
 				</div>
 			</div>

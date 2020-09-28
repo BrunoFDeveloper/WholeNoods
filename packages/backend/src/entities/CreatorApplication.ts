@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { Lazy } from '../types';
 import { ExternalEntity } from './BaseEntity';
-import { User } from './User';
+import { User, UserType } from './User';
 
 export enum ApplicationStatus {
 	PENDING,
@@ -17,7 +17,7 @@ export class CreatorApplication extends ExternalEntity {
 	@Column({ default: ApplicationStatus.PENDING })
 	status!: ApplicationStatus;
 
-	@Column()
+	@Column({ nullable: true })
 	reason?: string;
 
 	async reject(reason: string) {
@@ -29,7 +29,11 @@ export class CreatorApplication extends ExternalEntity {
 
 	async approve() {
 		this.status = ApplicationStatus.ACCEPTED;
+		const user = await this.user;
+		user.type = UserType.CREATOR;
 
+		// TODO: Transaction:
+		await user.save();
 		await this.save();
 	}
 }

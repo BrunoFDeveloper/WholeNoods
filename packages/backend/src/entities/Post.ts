@@ -41,10 +41,6 @@ export class Post extends ExternalEntity {
 	@Column({ default: true })
 	previewMedia!: boolean;
 
-	@Field({ nullable: true })
-	@Column({ nullable: true })
-	title?: string;
-
 	@Field()
 	@Column()
 	text!: string;

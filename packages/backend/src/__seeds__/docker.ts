@@ -9,6 +9,13 @@ async function main() {
 		bio: 'I created this site, what else do you want to know?',
 	});
 
+	try {
+		const application = await vjj.applyToCreator();
+		await application.approve();
+	} catch (e) {
+		console.log('Application failed: ', e);
+	}
+
 	await createThread(vjj, tru);
 }
 

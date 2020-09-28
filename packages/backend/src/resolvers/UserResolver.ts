@@ -38,6 +38,18 @@ export class UserResolver {
 	}
 
 	@Authorized()
+	@FieldResolver(() => Boolean)
+	isFollowing(@Root() rootUser: User, @Ctx() { user }: AuthorizedContext) {
+		return user.isFollowing(rootUser);
+	}
+
+	@Authorized()
+	@FieldResolver(() => Boolean)
+	isViewer(@Root() root: User, @Ctx() { user }: AuthorizedContext) {
+		return root.id === user.id;
+	}
+
+	@Authorized()
 	@FieldResolver(() => [Post])
 	async posts(@Root() root: User, @Ctx() { user }: AuthorizedContext) {
 		// Only creators can post, so save us some time:

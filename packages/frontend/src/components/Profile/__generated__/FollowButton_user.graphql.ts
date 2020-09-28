@@ -4,16 +4,15 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type PostUser_user = {
+export type FollowButton_user = {
     readonly id: string;
-    readonly name: string;
-    readonly username: string;
-    readonly " $refType": "PostUser_user";
+    readonly isFollowing: boolean;
+    readonly " $refType": "FollowButton_user";
 };
-export type PostUser_user$data = PostUser_user;
-export type PostUser_user$key = {
-    readonly " $data"?: PostUser_user$data;
-    readonly " $fragmentRefs": FragmentRefs<"PostUser_user">;
+export type FollowButton_user$data = FollowButton_user;
+export type FollowButton_user$key = {
+    readonly " $data"?: FollowButton_user$data;
+    readonly " $fragmentRefs": FragmentRefs<"FollowButton_user">;
 };
 
 
@@ -22,7 +21,7 @@ const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "PostUser_user",
+  "name": "FollowButton_user",
   "selections": [
     {
       "alias": null,
@@ -35,19 +34,12 @@ const node: ReaderFragment = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "name",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "username",
+      "name": "isFollowing",
       "storageKey": null
     }
   ],
   "type": "User",
   "abstractKey": null
 };
-(node as any).hash = 'd4075976a393354a18c08a85a534490c';
+(node as any).hash = 'f697d1136edd23acc8f0d89ac96588ef';
 export default node;

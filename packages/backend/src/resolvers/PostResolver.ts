@@ -25,7 +25,6 @@ import truncate from 'lodash/truncate';
 
 @InputType()
 class CreatePostInput {
-	@Field() title!: string;
 	@Field() text!: string;
 	@Field(() => PostVisibility) visibility!: PostVisibility;
 	@Field(() => [GraphQLUpload]) media!: Promise<FileUpload>[];

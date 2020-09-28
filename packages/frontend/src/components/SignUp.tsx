@@ -39,12 +39,12 @@ export default function SignUp() {
 	return (
 		<div className="py-12">
 			<div className="w-96 mx-auto">
-				<Heading>Sign up.</Heading>
 				<Form
 					onSubmit={handleSubmit}
 					disabled={isInFlight}
 					className="space-y-4"
 				>
+					<Heading>Sign up.</Heading>
 					<Input label="Name" name="name" placeholder="Name..." autoFocus />
 					<Input label="Email" name="email" placeholder="Email..." />
 					<Input label="Password" name="password" placeholder="Password..." />

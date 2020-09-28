@@ -7,11 +7,23 @@ type Props = {
 	className?: string;
 };
 
-export default function ProfileCard({ src, alt, className }: Props) {
+const SIZE_TO_CLASSES = {
+	small: 'h-10 w-8 rounded',
+	medium: 'h-12 w-10 rounded-md',
+	large: 'h-40 w-32 rounded-lg',
+};
+
+export default function ProfileCard({
+	src,
+	alt,
+	size = 'small',
+	className,
+}: Props) {
 	return (
 		<div
 			className={clsx(
-				'bg-gray-200 rounded h-10 w-8 overflow-hidden',
+				'bg-gray-200 rounded overflow-hidden',
+				SIZE_TO_CLASSES[size],
 				className,
 			)}
 		>

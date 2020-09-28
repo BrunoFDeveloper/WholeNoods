@@ -13,6 +13,7 @@ import SecurePassword from 'secure-password';
 import { Post } from './Post';
 import { KoaContext, Lazy } from '../types';
 import { Subscription } from './Subscription';
+import { Follow } from './Follow';
 import { ExternalEntity } from './BaseEntity';
 import { Favorite } from './Favorite';
 import { getCurrentRequest } from '../utils/currentRequest';
@@ -78,7 +79,7 @@ export class User extends ExternalEntity {
 	}
 
 	@Field()
-	@Column({ type: 'citext', unique: true })
+	@Column('citext', { unique: true })
 	email!: string;
 
 	@Field()
@@ -86,7 +87,7 @@ export class User extends ExternalEntity {
 	name!: string;
 
 	@Field()
-	@Column({ unique: true })
+	@Column('citext', { unique: true })
 	username!: string;
 
 	@Field()
@@ -136,6 +137,21 @@ export class User extends ExternalEntity {
 	})
 	subscribers!: Lazy<Subscription[]>;
 
+	@OneToMany(() => Subscription, (subscription) => subscription.fromUser, {
+		lazy: true,
+	})
+	subscriptions!: Lazy<Subscription[]>;
+
+	@OneToMany(() => Follow, (follow) => follow.toUser, {
+		lazy: true,
+	})
+	followers!: Lazy<Follow[]>;
+
+	@OneToMany(() => Follow, (follow) => follow.fromUser, {
+		lazy: true,
+	})
+	following!: Lazy<Follow[]>;
+
 	getSubscribersCount() {
 		return Subscription.count({
 			where: { toUser: this },
@@ -149,11 +165,6 @@ export class User extends ExternalEntity {
 			},
 		});
 	}
-
-	@OneToMany(() => Subscription, (subscription) => subscription.fromUser, {
-		lazy: true,
-	})
-	subscriptions!: Lazy<Subscription[]>;
 
 	@OneToMany(() => MessageThreadParticipant, (thread) => thread.user, {
 		lazy: true,
@@ -188,8 +199,39 @@ export class User extends ExternalEntity {
 		ctx.session.type = type;
 	}
 
+	@Field(() => Boolean)
 	isCreator() {
-		return this.type !== UserType.CREATOR;
+		console.log(this);
+		return this.type === UserType.CREATOR;
+	}
+
+	async followOrUnfollow(otherUser: User) {
+		const existingFollow = await Follow.findOne({
+			fromUser: this,
+			toUser: otherUser,
+		});
+
+		if (existingFollow) {
+			await Follow.remove(existingFollow);
+			return existingFollow;
+		}
+		console.log('CREATING');
+
+		return await Follow.create({
+			fromUser: this,
+			toUser: otherUser,
+		}).save();
+	}
+
+	async isFollowing(otherUser: User) {
+		const existingFollow = await Follow.findOne({
+			fromUser: this,
+			toUser: otherUser,
+		});
+
+		console.log(existingFollow);
+
+		return !!existingFollow;
 	}
 
 	private subscribedCache = new WeakMap<User, boolean>();
@@ -217,7 +259,7 @@ export class User extends ExternalEntity {
 	}
 
 	async applyToCreator() {
-		if (this.type === UserType.CREATOR) {
+		if (this.isCreator()) {
 			throw new Error('You are already a creator');
 		}
 
@@ -243,6 +285,10 @@ export class User extends ExternalEntity {
 		if (pendingApplication) {
 			throw new Error('You already have a pending application.');
 		}
+
+		return await CreatorApplication.create({
+			user: this
+		}).save();
 
 		// TODO: Create an application.
 	}

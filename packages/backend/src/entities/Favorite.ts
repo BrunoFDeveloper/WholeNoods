@@ -1,35 +1,32 @@
-import { ObjectType } from "type-graphql";
-import { Entity, In, ManyToOne, RelationId, Unique } from "typeorm";
-import { Lazy } from "../types";
-import { ExternalEntity } from "./BaseEntity";
-import { Post } from "./Post";
-import { User } from "./User";
+import { ObjectType } from 'type-graphql';
+import { Entity, In, ManyToOne, RelationId, Unique } from 'typeorm';
+import { Lazy } from '../types';
+import { ExternalEntity } from './BaseEntity';
+import { Post } from './Post';
+import { User } from './User';
 
 @ObjectType()
 @Entity()
-@Unique(["user", "post"])
+@Unique(['user', 'post'])
 export class Favorite extends ExternalEntity {
-  static async findCountForPosts(ids: readonly string[]) {
-    const favorites = await this.createQueryBuilder("favorite")
-      .select([
-        `"favorite"."postId" as post_id`,
-        `COUNT("favorite"."id") as count`,
-      ])
-      .where(`"favorite"."postId" IN (:...ids)`, { ids })
-      .groupBy(`"favorite"."postId"`)
-      .getRawMany();
+	static async findCountForPosts(ids: readonly string[]) {
+		const favorites = await this.createQueryBuilder('favorite')
+			.select([`"favorite"."postId" as post_id`, `COUNT(favorite.id) as count`])
+			.where(`"favorite"."postId" IN (:...ids)`, { ids })
+			.groupBy(`"favorite"."postId"`)
+			.getRawMany();
 
-    return ids.map(
-      (id) => favorites.find((fav) => fav.post_id === id)?.count ?? 0
-    );
-  }
+		return ids.map(
+			(id) => favorites.find((fav) => fav.post_id === id)?.count ?? 0,
+		);
+	}
 
-  @ManyToOne(() => User, (user) => user.favorites, { lazy: true })
-  user!: Lazy<User>;
+	@ManyToOne(() => User, (user) => user.favorites, { lazy: true })
+	user!: Lazy<User>;
 
-  @ManyToOne(() => Post, (post) => post.favorites, { lazy: true })
-  post!: Lazy<Post>;
+	@ManyToOne(() => Post, (post) => post.favorites, { lazy: true })
+	post!: Lazy<Post>;
 
-  @RelationId((favorite: Favorite) => favorite.post)
-  postId!: string;
+	@RelationId((favorite: Favorite) => favorite.post)
+	postId!: string;
 }

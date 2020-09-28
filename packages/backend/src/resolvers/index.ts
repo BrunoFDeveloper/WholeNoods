@@ -1,4 +1,5 @@
 import { AuthResolver } from './AuthResolver';
+import { FollowResolver } from './FollowResolver';
 import { HomeResolver } from './HomeResolver';
 import { MessageResolver } from './MessageResolver';
 import { MessageThreadResolver } from './MessageThreadResolver';
@@ -14,4 +15,5 @@ export default [
 	PostResolver,
 	MessageThreadResolver,
 	MessageResolver,
+	FollowResolver,
 ] as const;

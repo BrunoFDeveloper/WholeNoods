@@ -3,14 +3,13 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type UserType = "CREATOR" | "VIEWER" | "%future added value";
 export type HeaderUserLinksQueryVariables = {};
 export type HeaderUserLinksQueryResponse = {
     readonly viewer: {
         readonly id: string;
         readonly name: string;
         readonly username: string;
-        readonly type: UserType;
+        readonly isCreator: boolean;
     } | null;
 };
 export type HeaderUserLinksQuery = {
@@ -26,7 +25,7 @@ query HeaderUserLinksQuery {
     id
     name
     username
-    type
+    isCreator
   }
 }
 */
@@ -66,7 +65,7 @@ var v0 = [
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "type",
+        "name": "isCreator",
         "storageKey": null
       }
     ],
@@ -91,14 +90,14 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "2569209bac039e90483b6b0e7976a249",
+    "cacheID": "bd946eb2322627d05b78f4d0b37a7683",
     "id": null,
     "metadata": {},
     "name": "HeaderUserLinksQuery",
     "operationKind": "query",
-    "text": "query HeaderUserLinksQuery {\n  viewer {\n    id\n    name\n    username\n    type\n  }\n}\n"
+    "text": "query HeaderUserLinksQuery {\n  viewer {\n    id\n    name\n    username\n    isCreator\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '9520d57d77efa44e3965bbf55a6f6c66';
+(node as any).hash = '05af69025e077b95e9bc53017010e183';
 export default node;

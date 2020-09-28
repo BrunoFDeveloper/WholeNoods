@@ -11,7 +11,7 @@ export default forwardRef<HTMLTextAreaElement, Props>(
 				{label}
 				<textarea
 					className={clsx(
-						'form-textarea block w-full sm:text-sm sm:leading-5 rounded rounded-b-none border-0',
+						'form-textarea block w-full sm:text-sm sm:leading-5 rounded rounded-b-none border-0 text-gray-900',
 						props.disabled && 'bg-gray-100',
 					)}
 					ref={ref}

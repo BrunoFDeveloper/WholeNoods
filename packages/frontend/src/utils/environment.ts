@@ -23,7 +23,6 @@ const network = new RelayNetworkLayer([
   }),
   isDev ? loggerMiddleware() : null,
   isDev ? errorMiddleware() : null,
-  isDev ? errorMiddleware() : null,
   uploadMiddleware(),
 ]);
 

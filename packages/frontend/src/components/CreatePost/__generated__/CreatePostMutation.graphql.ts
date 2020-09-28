@@ -7,26 +7,25 @@ export type PostVisibility = "PRIVATE" | "PRIVATE_PREVIEW" | "PUBLIC" | "%future
 export type CreatePostInput = {
     media: Array<unknown>;
     text: string;
-    title: string;
     visibility: PostVisibility;
 };
-export type ComposePostMutationVariables = {
+export type CreatePostMutationVariables = {
     input: CreatePostInput;
 };
-export type ComposePostMutationResponse = {
+export type CreatePostMutationResponse = {
     readonly createPost: {
         readonly id: string;
     };
 };
-export type ComposePostMutation = {
-    readonly response: ComposePostMutationResponse;
-    readonly variables: ComposePostMutationVariables;
+export type CreatePostMutation = {
+    readonly response: CreatePostMutationResponse;
+    readonly variables: CreatePostMutationVariables;
 };
 
 
 
 /*
-mutation ComposePostMutation(
+mutation CreatePostMutation(
   $input: CreatePostInput!
 ) {
   createPost(input: $input) {
@@ -74,7 +73,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "ComposePostMutation",
+    "name": "CreatePostMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -83,18 +82,18 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "ComposePostMutation",
+    "name": "CreatePostMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "9b1fe9a316552abde93f6659568ec952",
+    "cacheID": "83245f653e2e0b98866adcdb761fc083",
     "id": null,
     "metadata": {},
-    "name": "ComposePostMutation",
+    "name": "CreatePostMutation",
     "operationKind": "mutation",
-    "text": "mutation ComposePostMutation(\n  $input: CreatePostInput!\n) {\n  createPost(input: $input) {\n    id\n  }\n}\n"
+    "text": "mutation CreatePostMutation(\n  $input: CreatePostInput!\n) {\n  createPost(input: $input) {\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '508077b263d7beade086bad18cb3f27f';
+(node as any).hash = '1f1a82b6a62ecfbae185a69fb35d286f';
 export default node;

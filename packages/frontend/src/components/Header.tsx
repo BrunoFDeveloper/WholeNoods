@@ -12,7 +12,7 @@ function HeaderUserLinks() {
 					id
 					name
 					username
-					type
+					isCreator
 				}
 			}
 		`,
@@ -21,7 +21,7 @@ function HeaderUserLinks() {
 
 	return data.viewer ? (
 		<div className="flex items-center space-x-6">
-			{data.viewer.type === 'CREATOR' && (
+			{!data.viewer.isCreator && (
 				<Link to="/apply" className="text-indigo-500 font-bold text-lg">
 					Become a Creator
 				</Link>

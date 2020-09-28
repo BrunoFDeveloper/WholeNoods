@@ -12,18 +12,21 @@ export type ProfileQueryResponse = {
     readonly user: {
         readonly id: string;
         readonly name: string;
+        readonly username: string;
         readonly bio: string;
         readonly type: UserType;
         readonly postsCount: number;
         readonly subscribersCount: number;
+        readonly isViewer: boolean;
         readonly isCurrentlySubscribed: boolean;
+        readonly isFollowing: boolean;
         readonly pinnedPost: {
             readonly " $fragmentRefs": FragmentRefs<"Post_post">;
         } | null;
         readonly posts: ReadonlyArray<{
             readonly " $fragmentRefs": FragmentRefs<"Post_post">;
         }>;
-        readonly " $fragmentRefs": FragmentRefs<"PostUser_user">;
+        readonly " $fragmentRefs": FragmentRefs<"FollowButton_user">;
     };
 };
 export type ProfileQuery = {
@@ -40,12 +43,15 @@ query ProfileQuery(
   user(username: $username) {
     id
     name
+    username
     bio
     type
     postsCount
     subscribersCount
+    isViewer
     isCurrentlySubscribed
-    ...PostUser_user
+    isFollowing
+    ...FollowButton_user
     pinnedPost {
       ...Post_post
       id
@@ -57,19 +63,22 @@ query ProfileQuery(
   }
 }
 
-fragment PostUser_user on User {
+fragment FollowButton_user on User {
   id
-  name
-  username
+  isFollowing
 }
 
 fragment Post_post on Post {
   id
-  title
   text
   visibility
   favoritesCount
   hasFavorited
+  user {
+    id
+    name
+    username
+  }
   media {
     url
     type
@@ -111,53 +120,67 @@ v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "bio",
+  "name": "username",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "type",
+  "name": "bio",
   "storageKey": null
 },
 v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "postsCount",
+  "name": "type",
   "storageKey": null
 },
 v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "subscribersCount",
+  "name": "postsCount",
   "storageKey": null
 },
 v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "subscribersCount",
+  "storageKey": null
+},
+v9 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isViewer",
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "isCurrentlySubscribed",
   "storageKey": null
 },
-v9 = [
+v11 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isFollowing",
+  "storageKey": null
+},
+v12 = [
   {
     "args": null,
     "kind": "FragmentSpread",
     "name": "Post_post"
   }
 ],
-v10 = [
+v13 = [
   (v2/*: any*/),
-  {
-    "alias": null,
-    "args": null,
-    "kind": "ScalarField",
-    "name": "title",
-    "storageKey": null
-  },
   {
     "alias": null,
     "args": null,
@@ -189,6 +212,20 @@ v10 = [
   {
     "alias": null,
     "args": null,
+    "concreteType": "User",
+    "kind": "LinkedField",
+    "name": "user",
+    "plural": false,
+    "selections": [
+      (v2/*: any*/),
+      (v3/*: any*/),
+      (v4/*: any*/)
+    ],
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
     "concreteType": "PostMedia",
     "kind": "LinkedField",
     "name": "media",
@@ -201,7 +238,7 @@ v10 = [
         "name": "url",
         "storageKey": null
       },
-      (v5/*: any*/),
+      (v6/*: any*/),
       (v2/*: any*/)
     ],
     "storageKey": null
@@ -229,6 +266,9 @@ return {
           (v6/*: any*/),
           (v7/*: any*/),
           (v8/*: any*/),
+          (v9/*: any*/),
+          (v10/*: any*/),
+          (v11/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -236,7 +276,7 @@ return {
             "kind": "LinkedField",
             "name": "pinnedPost",
             "plural": false,
-            "selections": (v9/*: any*/),
+            "selections": (v12/*: any*/),
             "storageKey": null
           },
           {
@@ -246,13 +286,13 @@ return {
             "kind": "LinkedField",
             "name": "posts",
             "plural": true,
-            "selections": (v9/*: any*/),
+            "selections": (v12/*: any*/),
             "storageKey": null
           },
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "PostUser_user"
+            "name": "FollowButton_user"
           }
         ],
         "storageKey": null
@@ -282,13 +322,9 @@ return {
           (v6/*: any*/),
           (v7/*: any*/),
           (v8/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "username",
-            "storageKey": null
-          },
+          (v9/*: any*/),
+          (v10/*: any*/),
+          (v11/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -296,7 +332,7 @@ return {
             "kind": "LinkedField",
             "name": "pinnedPost",
             "plural": false,
-            "selections": (v10/*: any*/),
+            "selections": (v13/*: any*/),
             "storageKey": null
           },
           {
@@ -306,7 +342,7 @@ return {
             "kind": "LinkedField",
             "name": "posts",
             "plural": true,
-            "selections": (v10/*: any*/),
+            "selections": (v13/*: any*/),
             "storageKey": null
           }
         ],
@@ -315,14 +351,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b7392daa1e5f1bfc156832f5694f7757",
+    "cacheID": "5996df06298dbadbe17264005c2cd2d1",
     "id": null,
     "metadata": {},
     "name": "ProfileQuery",
     "operationKind": "query",
-    "text": "query ProfileQuery(\n  $username: String!\n) {\n  user(username: $username) {\n    id\n    name\n    bio\n    type\n    postsCount\n    subscribersCount\n    isCurrentlySubscribed\n    ...PostUser_user\n    pinnedPost {\n      ...Post_post\n      id\n    }\n    posts {\n      ...Post_post\n      id\n    }\n  }\n}\n\nfragment PostUser_user on User {\n  id\n  name\n  username\n}\n\nfragment Post_post on Post {\n  id\n  title\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  media {\n    url\n    type\n    id\n  }\n}\n"
+    "text": "query ProfileQuery(\n  $username: String!\n) {\n  user(username: $username) {\n    id\n    name\n    username\n    bio\n    type\n    postsCount\n    subscribersCount\n    isViewer\n    isCurrentlySubscribed\n    isFollowing\n    ...FollowButton_user\n    pinnedPost {\n      ...Post_post\n      id\n    }\n    posts {\n      ...Post_post\n      id\n    }\n  }\n}\n\nfragment FollowButton_user on User {\n  id\n  isFollowing\n}\n\nfragment Post_post on Post {\n  id\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  user {\n    id\n    name\n    username\n  }\n  media {\n    url\n    type\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'f81fac7e4fcc85d69535f25043259de9';
+(node as any).hash = 'f5640f60ff89d67b0059eaa8188c30fc';
 export default node;

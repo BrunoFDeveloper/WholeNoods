@@ -24,7 +24,7 @@ export default function MessageList() {
 	);
 
 	return (
-		<div className="overflow-y-auto flex-1 bg-black">
+		<div className="overflow-y-auto flex-1 bg-almost-black">
 			{data.messageThread.messages.map((message) => (
 				<Message key={message.id} message={message} />
 			))}

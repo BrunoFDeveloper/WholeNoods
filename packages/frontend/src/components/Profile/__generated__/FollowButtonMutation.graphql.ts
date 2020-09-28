@@ -3,29 +3,32 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from "relay-runtime";
-export type ProfileSubscribeMutationVariables = {
-    id: string;
+export type FollowInput = {
+    userId: string;
 };
-export type ProfileSubscribeMutationResponse = {
-    readonly subscribe: {
+export type FollowButtonMutationVariables = {
+    input: FollowInput;
+};
+export type FollowButtonMutationResponse = {
+    readonly follow: {
         readonly id: string;
-        readonly isCurrentlySubscribed: boolean;
+        readonly isFollowing: boolean;
     };
 };
-export type ProfileSubscribeMutation = {
-    readonly response: ProfileSubscribeMutationResponse;
-    readonly variables: ProfileSubscribeMutationVariables;
+export type FollowButtonMutation = {
+    readonly response: FollowButtonMutationResponse;
+    readonly variables: FollowButtonMutationVariables;
 };
 
 
 
 /*
-mutation ProfileSubscribeMutation(
-  $id: ID!
+mutation FollowButtonMutation(
+  $input: FollowInput!
 ) {
-  subscribe(user: $id) {
+  follow(input: $input) {
     id
-    isCurrentlySubscribed
+    isFollowing
   }
 }
 */
@@ -35,7 +38,7 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "id"
+    "name": "input"
   }
 ],
 v1 = [
@@ -44,13 +47,13 @@ v1 = [
     "args": [
       {
         "kind": "Variable",
-        "name": "user",
-        "variableName": "id"
+        "name": "input",
+        "variableName": "input"
       }
     ],
     "concreteType": "User",
     "kind": "LinkedField",
-    "name": "subscribe",
+    "name": "follow",
     "plural": false,
     "selections": [
       {
@@ -64,7 +67,7 @@ v1 = [
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "isCurrentlySubscribed",
+        "name": "isFollowing",
         "storageKey": null
       }
     ],
@@ -76,7 +79,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "ProfileSubscribeMutation",
+    "name": "FollowButtonMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -85,18 +88,18 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "ProfileSubscribeMutation",
+    "name": "FollowButtonMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "5ca2d235c855ca8242311432307aa077",
+    "cacheID": "8c9d2e77213a4689004962336bdc083d",
     "id": null,
     "metadata": {},
-    "name": "ProfileSubscribeMutation",
+    "name": "FollowButtonMutation",
     "operationKind": "mutation",
-    "text": "mutation ProfileSubscribeMutation(\n  $id: ID!\n) {\n  subscribe(user: $id) {\n    id\n    isCurrentlySubscribed\n  }\n}\n"
+    "text": "mutation FollowButtonMutation(\n  $input: FollowInput!\n) {\n  follow(input: $input) {\n    id\n    isFollowing\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '0562c2280db9ef1c3d2c65c0d08f4b88';
+(node as any).hash = '168d71d843209b2332d8280d5c1fe0b8';
 export default node;

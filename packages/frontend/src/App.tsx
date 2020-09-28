@@ -1,6 +1,6 @@
 import { RelayEnvironmentProvider } from 'react-relay/hooks';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import ComposePost from './components/ComposePost';
+import CreatePost from './components/CreatePost';
 import Home from './components/Home';
 import Layout from './components/Layout';
 import Profile from './components/Profile';
@@ -31,7 +31,7 @@ export default function App() {
 							</Route>
 							<Route path="/messages/*" element={<Messages />} />
 							<Route path="/posts/create">
-								<ComposePost />
+								<CreatePost />
 							</Route>
 						</Routes>
 					</Layout>

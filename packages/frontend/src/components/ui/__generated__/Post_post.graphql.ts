@@ -7,11 +7,15 @@ import { FragmentRefs } from "relay-runtime";
 export type PostVisibility = "PRIVATE" | "PRIVATE_PREVIEW" | "PUBLIC" | "%future added value";
 export type Post_post = {
     readonly id: string;
-    readonly title: string | null;
     readonly text: string;
     readonly visibility: PostVisibility;
     readonly favoritesCount: number;
     readonly hasFavorited: boolean;
+    readonly user: {
+        readonly id: string;
+        readonly name: string;
+        readonly username: string;
+    };
     readonly media: ReadonlyArray<{
         readonly url: string;
         readonly type: number;
@@ -26,26 +30,21 @@ export type Post_post$key = {
 
 
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
+return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
   "name": "Post_post",
   "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "title",
-      "storageKey": null
-    },
+    (v0/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -77,6 +76,32 @@ const node: ReaderFragment = {
     {
       "alias": null,
       "args": null,
+      "concreteType": "User",
+      "kind": "LinkedField",
+      "name": "user",
+      "plural": false,
+      "selections": [
+        (v0/*: any*/),
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "name",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "username",
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
       "concreteType": "PostMedia",
       "kind": "LinkedField",
       "name": "media",
@@ -103,5 +128,6 @@ const node: ReaderFragment = {
   "type": "Post",
   "abstractKey": null
 };
-(node as any).hash = '68ebd939a895d20ab325e9347af1ab65';
+})();
+(node as any).hash = '2c9a387326cc69106ee82fff9ba488fb';
 export default node;

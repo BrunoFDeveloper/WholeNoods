@@ -6,7 +6,6 @@
 input CreatePostInput {
   media: [Upload!]!
   text: String!
-  title: String!
   visibility: PostVisibility!
 }
 
@@ -17,6 +16,10 @@ scalar DateTime
 
 input FavoritePostInput {
   id: ID!
+}
+
+input FollowInput {
+  userId: ID!
 }
 
 type HomePage {
@@ -53,6 +56,7 @@ type Mutation {
   applyToCreator: User!
   createPost(input: CreatePostInput!): Post!
   favoritePost(input: FavoritePostInput!): Post!
+  follow(input: FollowInput!): User!
   pinPost(input: PinPostInput!): Post!
   sendMessage(input: SendMessageInput!): Message!
   signIn(input: SignInInput!): SignInResult!
@@ -72,7 +76,6 @@ type Post {
   id: ID!
   media: [PostMedia!]!
   text: String!
-  title: String
   updatedAt: DateTime!
   user: User!
   visibility: PostVisibility!
@@ -140,7 +143,10 @@ type User {
   createdAt: DateTime!
   email: String!
   id: ID!
+  isCreator: Boolean!
   isCurrentlySubscribed: Boolean!
+  isFollowing: Boolean!
+  isViewer: Boolean!
   location: String!
   name: String!
   pinnedPost: Post

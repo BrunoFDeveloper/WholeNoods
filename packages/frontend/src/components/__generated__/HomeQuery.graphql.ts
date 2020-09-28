@@ -9,9 +9,6 @@ export type HomeQueryResponse = {
     readonly home: {
         readonly posts: ReadonlyArray<{
             readonly id: string;
-            readonly user: {
-                readonly " $fragmentRefs": FragmentRefs<"PostUser_user">;
-            };
             readonly " $fragmentRefs": FragmentRefs<"Post_post">;
         }>;
     };
@@ -29,27 +26,21 @@ query HomeQuery {
     posts {
       id
       ...Post_post
-      user {
-        ...PostUser_user
-        id
-      }
     }
   }
 }
 
-fragment PostUser_user on User {
-  id
-  name
-  username
-}
-
 fragment Post_post on Post {
   id
-  title
   text
   visibility
   favoritesCount
   hasFavorited
+  user {
+    id
+    name
+    username
+  }
   media {
     url
     type
@@ -90,22 +81,6 @@ return {
             "plural": true,
             "selections": [
               (v0/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "User",
-                "kind": "LinkedField",
-                "name": "user",
-                "plural": false,
-                "selections": [
-                  {
-                    "args": null,
-                    "kind": "FragmentSpread",
-                    "name": "PostUser_user"
-                  }
-                ],
-                "storageKey": null
-              },
               {
                 "args": null,
                 "kind": "FragmentSpread",
@@ -148,13 +123,6 @@ return {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "title",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
                 "name": "text",
                 "storageKey": null
               },
@@ -182,32 +150,6 @@ return {
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "PostMedia",
-                "kind": "LinkedField",
-                "name": "media",
-                "plural": true,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "url",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "type",
-                    "storageKey": null
-                  },
-                  (v0/*: any*/)
-                ],
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
                 "concreteType": "User",
                 "kind": "LinkedField",
                 "name": "user",
@@ -230,6 +172,32 @@ return {
                   }
                 ],
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "PostMedia",
+                "kind": "LinkedField",
+                "name": "media",
+                "plural": true,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "url",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "type",
+                    "storageKey": null
+                  },
+                  (v0/*: any*/)
+                ],
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -240,14 +208,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b36a79ee52b8b5a6afe412ad5e88126e",
+    "cacheID": "5dee15fa9ae704331c2657d3e9e5879e",
     "id": null,
     "metadata": {},
     "name": "HomeQuery",
     "operationKind": "query",
-    "text": "query HomeQuery {\n  home {\n    posts {\n      id\n      ...Post_post\n      user {\n        ...PostUser_user\n        id\n      }\n    }\n  }\n}\n\nfragment PostUser_user on User {\n  id\n  name\n  username\n}\n\nfragment Post_post on Post {\n  id\n  title\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  media {\n    url\n    type\n    id\n  }\n}\n"
+    "text": "query HomeQuery {\n  home {\n    posts {\n      id\n      ...Post_post\n    }\n  }\n}\n\nfragment Post_post on Post {\n  id\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  user {\n    id\n    name\n    username\n  }\n  media {\n    url\n    type\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '791774607260cc140a8ee1685ce07f37';
+(node as any).hash = '1abb1af15a4800e699e5b41b3db40207';
 export default node;

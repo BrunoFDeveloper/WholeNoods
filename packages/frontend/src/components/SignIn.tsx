@@ -38,12 +38,12 @@ export default function SignIn() {
 	return (
 		<div className="py-12">
 			<div className="w-96 mx-auto">
-				<Heading>Sign in.</Heading>
 				<Form
 					disabled={isInFlight}
 					onSubmit={handleSubmit}
 					className="space-y-4"
 				>
+					<Heading>Sign in.</Heading>
 					<Input
 						label="Email"
 						placeholder="Email address..."
