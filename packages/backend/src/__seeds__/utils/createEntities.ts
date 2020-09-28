@@ -10,7 +10,7 @@ export async function createUser(username: string, extras?: Partial<User>) {
 
 	const user = User.create({
 		username,
-		email: `${username}@wholenoods.com`,
+		email: `${username}@noods.com`,
 		name: username,
 		...extras,
 	});

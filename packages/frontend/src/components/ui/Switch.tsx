@@ -32,7 +32,7 @@ export default function Switch({
 				aria-checked="false"
 				className={clsx(
 					'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline',
-					checked ? 'bg-indigo-600' : 'bg-gray-200',
+					checked ? 'bg-red-400' : 'bg-gray-400',
 				)}
 				{...props}
 			>

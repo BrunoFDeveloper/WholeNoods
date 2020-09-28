@@ -11,10 +11,12 @@ export type Post_post = {
     readonly visibility: PostVisibility;
     readonly favoritesCount: number;
     readonly hasFavorited: boolean;
+    readonly createdAt: string;
     readonly user: {
         readonly id: string;
         readonly name: string;
         readonly username: string;
+        readonly avatarUrl: string;
     };
     readonly media: ReadonlyArray<{
         readonly url: string;
@@ -76,6 +78,13 @@ return {
     {
       "alias": null,
       "args": null,
+      "kind": "ScalarField",
+      "name": "createdAt",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
       "concreteType": "User",
       "kind": "LinkedField",
       "name": "user",
@@ -94,6 +103,13 @@ return {
           "args": null,
           "kind": "ScalarField",
           "name": "username",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "avatarUrl",
           "storageKey": null
         }
       ],
@@ -129,5 +145,5 @@ return {
   "abstractKey": null
 };
 })();
-(node as any).hash = '2c9a387326cc69106ee82fff9ba488fb';
+(node as any).hash = '54442091bae09ffffcd1c0b4cf875c26';
 export default node;

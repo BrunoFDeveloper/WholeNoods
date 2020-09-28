@@ -10,27 +10,29 @@ import { Environment, RecordSource, Store } from "relay-runtime";
 
 const isDev = process.env.NODE_ENV !== "production";
 
-const network = new RelayNetworkLayer([
-  cacheMiddleware({
-    // max 100 requests
-    size: 100,
-    // 15 minutes
-    ttl: 900000,
-  }),
-  urlMiddleware({
-    url: "/api/graphql",
-    credentials: "include",
-  }),
-  isDev ? loggerMiddleware() : null,
-  isDev ? errorMiddleware() : null,
-  uploadMiddleware(),
-]);
+export function createEnvironment() {
+  const network = new RelayNetworkLayer([
+    cacheMiddleware({
+      // max 100 requests
+      size: 100,
+      // 15 minutes
+      ttl: 900000,
+    }),
+    urlMiddleware({
+      url: "/api/graphql",
+      credentials: "include",
+    }),
+    isDev ? loggerMiddleware() : null,
+    isDev ? errorMiddleware() : null,
+    uploadMiddleware(),
+  ]);
 
-const source = new RecordSource();
-const store = new Store(source, {
-  // TODO: Tweak number:
-  gcReleaseBufferSize: 0,
-});
-const environment = new Environment({ network, store });
+  const source = new RecordSource();
+  const store = new Store(source, {
+    // TODO: Tweak number:
+    gcReleaseBufferSize: 0,
+  });
+  const environment = new Environment({ network, store });
 
-export default environment;
+  return environment;
+}

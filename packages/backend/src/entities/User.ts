@@ -82,6 +82,9 @@ export class User extends ExternalEntity {
 	@Column('citext', { unique: true })
 	email!: string;
 
+	@Column({ nullable: true })
+	avatarUrl?: string;
+
 	@Field()
 	@Column()
 	name!: string;
@@ -287,7 +290,7 @@ export class User extends ExternalEntity {
 		}
 
 		return await CreatorApplication.create({
-			user: this
+			user: this,
 		}).save();
 
 		// TODO: Create an application.

@@ -7,13 +7,35 @@ import Profile from './components/Profile';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import Messages from './components/Messages';
-import { Provider } from './models';
-import environment from './utils/environment';
+import { Provider, rootStore } from './models';
+import { createEnvironment } from './utils/environment';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useRef, useState } from 'react';
+import { Environment } from 'react-relay';
 
-export default function App() {
+// NOTE: I use rootStore and not useMst because the root store is not yet provided.
+export default observer(() => {
+	const [prevIsSignedIn, setPrevIsSignedIn] = useState(
+		rootStore.user.isSignedIn,
+	);
+	const environmentRef = useRef<Environment>();
+
+	useEffect(() => {
+		setPrevIsSignedIn(rootStore.user.isSignedIn);
+	}, [rootStore.user.isSignedIn]);
+
+	if (
+		// If we do not have an environment...
+		!environmentRef.current ||
+		// Or if the user state has changed (signed in or signed out)...
+		rootStore.user.isSignedIn !== prevIsSignedIn
+	) {
+		environmentRef.current = createEnvironment();
+	}
+
 	return (
 		<Provider>
-			<RelayEnvironmentProvider environment={environment}>
+			<RelayEnvironmentProvider environment={environmentRef.current}>
 				<BrowserRouter>
 					<Layout>
 						<Routes>
@@ -39,4 +61,4 @@ export default function App() {
 			</RelayEnvironmentProvider>
 		</Provider>
 	);
-}
+});

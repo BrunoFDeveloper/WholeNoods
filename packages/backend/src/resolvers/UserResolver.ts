@@ -49,6 +49,11 @@ export class UserResolver {
 		return root.id === user.id;
 	}
 
+	@FieldResolver(() => String)
+	avatarUrl(@Root() root: User) {
+		return root.avatarUrl || 'https://www.gravatar.com/avatar/abc123';
+	}
+
 	@Authorized()
 	@FieldResolver(() => [Post])
 	async posts(@Root() root: User, @Ctx() { user }: AuthorizedContext) {

@@ -4,14 +4,14 @@ import Button from '../ui/Button';
 
 export default function SubscribeBox() {
 	return (
-		<div className="bg-almost-black shadow-white p-6 w-full md:w-80 rounded space-y-4 border border-pink-400">
+		<div className="bg-almost-black shadow-white p-6 w-full md:w-60 lg:w-80 rounded space-y-4 border border-pink-400">
 			<div className="flex justify-center">
 				<span className="text-gray-100 font-bold text-lg">
 					Become a subscriber
 					<GradBar size="small" color="pink" />
 				</span>
 			</div>
-			<div className="flex justify-between items-center">
+			<div className="flex flex-row md:flex-col lg:flex-row space-y-0 md:space-y-4 lg:space-y-0 justify-between items-center">
 				<div>
 					<div className="flex items-end justify-center">
 						<Heading size="h3">$20</Heading>

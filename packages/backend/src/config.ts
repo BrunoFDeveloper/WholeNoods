@@ -1,4 +1,4 @@
-export const COOKIE_NAME = 'wholenoods.cookie';
+export const COOKIE_NAME = 'noods.cookie';
 export const COOKIE_SECRET = 'replace-before-prod';
 
 /**

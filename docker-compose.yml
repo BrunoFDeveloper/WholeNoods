@@ -35,7 +35,7 @@ services:
     depends_on:
       - postgres
     labels:
-      - 'traefik.http.routers.backend.rule=Host(`wholenoods.localhost`) && PathPrefix(`/api`)'
+      - 'traefik.http.routers.backend.rule=Host(`noods.localhost`) && PathPrefix(`/api`)'
 
   seed_database:
     image: node:13
@@ -60,7 +60,7 @@ services:
     depends_on:
       - backend
     labels:
-      - 'traefik.http.routers.frontend.rule=Host(`wholenoods.localhost`)'
+      - 'traefik.http.routers.frontend.rule=Host(`noods.localhost`)'
 
 volumes:
   pgdata: {}

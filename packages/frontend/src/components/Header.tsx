@@ -13,6 +13,7 @@ function HeaderUserLinks() {
 					name
 					username
 					isCreator
+					avatarUrl
 				}
 			}
 		`,
@@ -32,7 +33,7 @@ function HeaderUserLinks() {
 			>
 				{data.viewer.name}
 			</Link>
-			<ProfileCard src="https://github.com/kesne.png" className="-my-1" />
+			<ProfileCard src={data.viewer.avatarUrl} className="-my-1" />
 		</div>
 	) : (
 		<Link className="font-bold text-lg" to="/signin">

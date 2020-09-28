@@ -139,6 +139,7 @@ input SignUpInput {
 scalar Upload
 
 type User {
+  avatarUrl: String!
   bio: String!
   createdAt: DateTime!
   email: String!
