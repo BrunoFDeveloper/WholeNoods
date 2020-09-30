@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+/* @relayHash 83245f653e2e0b98866adcdb761fc083 */
 
 import { ConcreteRequest } from "relay-runtime";
 export type PostVisibility = "PRIVATE" | "PRIVATE_PREVIEW" | "PUBLIC" | "%future added value";
@@ -86,12 +87,11 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "83245f653e2e0b98866adcdb761fc083",
-    "id": null,
+    "id": "83245f653e2e0b98866adcdb761fc083",
     "metadata": {},
     "name": "CreatePostMutation",
     "operationKind": "mutation",
-    "text": "mutation CreatePostMutation(\n  $input: CreatePostInput!\n) {\n  createPost(input: $input) {\n    id\n  }\n}\n"
+    "text": null
   }
 };
 })();

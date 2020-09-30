@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+/* @relayHash ed33b48df73ac69ddd33ee40d0ecdecb */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -174,12 +175,11 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ed33b48df73ac69ddd33ee40d0ecdecb",
-    "id": null,
+    "id": "ed33b48df73ac69ddd33ee40d0ecdecb",
     "metadata": {},
     "name": "MessageListQuery",
     "operationKind": "query",
-    "text": "query MessageListQuery(\n  $id: ID!\n) {\n  messageThread(id: $id) {\n    id\n    messages {\n      id\n      ...Message_message\n    }\n  }\n}\n\nfragment Message_message on Message {\n  text\n  fromViewer\n  user {\n    id\n    name\n  }\n}\n"
+    "text": null
   }
 };
 })();

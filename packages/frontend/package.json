@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel ./src/index.html --no-source-maps --hmr-port 4321",
     "dev": "NODE_ENV=development webpack-dev-server",
-    "compile": "relay-compiler"
+    "compile": "relay-compiler --persist-output ../backend/persisted-queries.json"
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.11.2",

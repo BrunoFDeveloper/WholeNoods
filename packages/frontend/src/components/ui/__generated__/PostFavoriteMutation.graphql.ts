@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+/* @relayHash 3863ddc9deac589008a5765869940180 */
 
 import { ConcreteRequest } from "relay-runtime";
 export type FavoritePostInput = {
@@ -101,12 +102,11 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "3863ddc9deac589008a5765869940180",
-    "id": null,
+    "id": "3863ddc9deac589008a5765869940180",
     "metadata": {},
     "name": "PostFavoriteMutation",
     "operationKind": "mutation",
-    "text": "mutation PostFavoriteMutation(\n  $input: FavoritePostInput!\n) {\n  favoritePost(input: $input) {\n    id\n    favoritesCount\n    hasFavorited\n  }\n}\n"
+    "text": null
   }
 };
 })();

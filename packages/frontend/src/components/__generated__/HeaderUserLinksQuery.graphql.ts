@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+/* @relayHash 8ed7442e77a84a78ccf0537e9c960d62 */
 
 import { ConcreteRequest } from "relay-runtime";
 export type HeaderUserLinksQueryVariables = {};
@@ -99,12 +100,11 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "8ed7442e77a84a78ccf0537e9c960d62",
-    "id": null,
+    "id": "8ed7442e77a84a78ccf0537e9c960d62",
     "metadata": {},
     "name": "HeaderUserLinksQuery",
     "operationKind": "query",
-    "text": "query HeaderUserLinksQuery {\n  viewer {\n    id\n    name\n    username\n    isCreator\n    avatarUrl\n  }\n}\n"
+    "text": null
   }
 };
 })();

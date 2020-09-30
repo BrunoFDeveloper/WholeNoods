@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+/* @relayHash dacc3ab779ba61b6c54762488b12ccc6 */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -148,12 +149,11 @@ return {
     ]
   },
   "params": {
-    "cacheID": "dacc3ab779ba61b6c54762488b12ccc6",
-    "id": null,
+    "id": "dacc3ab779ba61b6c54762488b12ccc6",
     "metadata": {},
     "name": "ComposerMutation",
     "operationKind": "mutation",
-    "text": "mutation ComposerMutation(\n  $input: SendMessageInput!\n) {\n  sendMessage(input: $input) {\n    id\n    ...Message_message\n  }\n}\n\nfragment Message_message on Message {\n  text\n  fromViewer\n  user {\n    id\n    name\n  }\n}\n"
+    "text": null
   }
 };
 })();

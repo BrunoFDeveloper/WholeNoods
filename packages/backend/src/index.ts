@@ -3,7 +3,11 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import session from 'koa-session';
 import depthLimit from 'graphql-depth-limit';
-import { simpleEstimator, getComplexity, fieldExtensionsEstimator } from 'graphql-query-complexity';
+import {
+	simpleEstimator,
+	getComplexity,
+	fieldExtensionsEstimator,
+} from 'graphql-query-complexity';
 import { ApolloServer } from 'apollo-server-koa';
 import { AuthChecker, buildSchema } from 'type-graphql';
 import { createConnection, getConnection } from 'typeorm';
@@ -12,12 +16,22 @@ import { User } from './entities/User';
 import { Context, KoaContext } from './types';
 import { ApolloServerLoaderPlugin } from 'type-graphql-dataloader';
 import { run } from './utils/currentRequest';
-import { COOKIE_NAME, COOKIE_SECRET, MAX_COMPLEXITY, MAX_DEPTH } from './config';
+import {
+	COOKIE_NAME,
+	COOKIE_SECRET,
+	MAX_COMPLEXITY,
+	MAX_DEPTH,
+} from './config';
+
+const GRAPHQL_PATH = '/api/graphql';
 
 async function main() {
 	await createConnection(require('../ormconfig.js'));
 
-	const authChecker: AuthChecker<Context> = ({ root, args, context, info }, roles) => {
+	const authChecker: AuthChecker<Context> = (
+		{ root, args, context, info },
+		roles,
+	) => {
 		if (context.user) {
 			return true;
 		}
@@ -74,7 +88,10 @@ async function main() {
 							operationName: request.operationName,
 							query: document,
 							variables: request.variables,
-							estimators: [fieldExtensionsEstimator(), simpleEstimator({ defaultComplexity: 1 })],
+							estimators: [
+								fieldExtensionsEstimator(),
+								simpleEstimator({ defaultComplexity: 1 }),
+							],
 						});
 
 						if (complexity > MAX_COMPLEXITY) {
@@ -92,7 +109,23 @@ async function main() {
 		validationRules: [depthLimit(MAX_DEPTH)],
 	});
 
-	server.applyMiddleware({ app, path: '/api/graphql' });
+	app.use((ctx, next) => {
+		if (ctx.path !== GRAPHQL_PATH) {
+			return next();
+		}
+
+		const { body } = ctx.request;
+
+		if (body.query || !body.id) {
+			throw new Error('Only persisted queries are permitted.');
+		}
+
+		body.query = require('../persisted-queries.json')[body.id];
+
+		return next();
+	});
+
+	server.applyMiddleware({ app, path: GRAPHQL_PATH });
 
 	app.listen(4000, () => {
 		console.log('Apollo server running on port 4000.');

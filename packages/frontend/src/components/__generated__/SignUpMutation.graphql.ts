@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+/* @relayHash b2e13e54e45ab9560374b060b8867e39 */
 
 import { ConcreteRequest } from "relay-runtime";
 export type SignUpInput = {
@@ -85,12 +86,11 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "b2e13e54e45ab9560374b060b8867e39",
-    "id": null,
+    "id": "b2e13e54e45ab9560374b060b8867e39",
     "metadata": {},
     "name": "SignUpMutation",
     "operationKind": "mutation",
-    "text": "mutation SignUpMutation(\n  $input: SignUpInput!\n) {\n  signUp(input: $input) {\n    ok\n  }\n}\n"
+    "text": null
   }
 };
 })();

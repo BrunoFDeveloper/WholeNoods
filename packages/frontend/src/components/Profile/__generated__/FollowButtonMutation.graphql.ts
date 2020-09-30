@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+/* @relayHash 8c9d2e77213a4689004962336bdc083d */
 
 import { ConcreteRequest } from "relay-runtime";
 export type FollowInput = {
@@ -92,12 +93,11 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "8c9d2e77213a4689004962336bdc083d",
-    "id": null,
+    "id": "8c9d2e77213a4689004962336bdc083d",
     "metadata": {},
     "name": "FollowButtonMutation",
     "operationKind": "mutation",
-    "text": "mutation FollowButtonMutation(\n  $input: FollowInput!\n) {\n  follow(input: $input) {\n    id\n    isFollowing\n  }\n}\n"
+    "text": null
   }
 };
 })();

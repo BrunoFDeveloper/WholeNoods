@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+/* @relayHash 1cc69370104c41e1ea0f13275e4f5dc2 */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -224,12 +225,11 @@ return {
     ]
   },
   "params": {
-    "cacheID": "1cc69370104c41e1ea0f13275e4f5dc2",
-    "id": null,
+    "id": "1cc69370104c41e1ea0f13275e4f5dc2",
     "metadata": {},
     "name": "HomeQuery",
     "operationKind": "query",
-    "text": "query HomeQuery {\n  home {\n    posts {\n      id\n      ...Post_post\n    }\n  }\n}\n\nfragment Post_post on Post {\n  id\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  createdAt\n  user {\n    id\n    name\n    username\n    avatarUrl\n  }\n  media {\n    url\n    type\n    id\n  }\n}\n"
+    "text": null
   }
 };
 })();

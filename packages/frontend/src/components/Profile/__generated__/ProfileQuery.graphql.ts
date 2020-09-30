@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+/* @relayHash 7c677e5bc89fc717c5ef39c431a967dc */
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
@@ -348,12 +349,11 @@ return {
     ]
   },
   "params": {
-    "cacheID": "7c677e5bc89fc717c5ef39c431a967dc",
-    "id": null,
+    "id": "7c677e5bc89fc717c5ef39c431a967dc",
     "metadata": {},
     "name": "ProfileQuery",
     "operationKind": "query",
-    "text": "query ProfileQuery(\n  $username: String!\n) {\n  user(username: $username) {\n    id\n    name\n    username\n    bio\n    type\n    postsCount\n    subscribersCount\n    isViewer\n    avatarUrl\n    isCurrentlySubscribed\n    isFollowing\n    ...FollowButton_user\n    ...Posts_user\n  }\n}\n\nfragment FollowButton_user on User {\n  id\n  isFollowing\n}\n\nfragment Post_post on Post {\n  id\n  text\n  visibility\n  favoritesCount\n  hasFavorited\n  createdAt\n  user {\n    id\n    name\n    username\n    avatarUrl\n  }\n  media {\n    url\n    type\n    id\n  }\n}\n\nfragment Posts_user on User {\n  pinnedPost {\n    ...Post_post\n    id\n  }\n  posts {\n    ...Post_post\n    id\n  }\n}\n"
+    "text": null
   }
 };
 })();
