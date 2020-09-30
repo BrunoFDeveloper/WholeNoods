@@ -1,5 +1,24 @@
 # Whole Noods
 
+## Developing
+
+```
+yarn
+docker-compose up
+```
+
+#### Running Relay Compiler
+
+```
+yarn compile
+```
+
+#### Running TypeORM CLI Locally
+
+```
+docker-compose run backend yarn run typeorm <command>
+```
+
 ## Features
 
 - User accounts with two types: Viewer and Creator

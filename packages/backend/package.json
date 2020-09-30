@@ -5,7 +5,9 @@
 	"license": "SEE LICENSE IN LICENSE.MD",
 	"scripts": {
 		"start": "ts-node-dev --transpile-only --respawn ./src/index.ts",
-		"seed": "ts-node --transpile-only ./src/__seeds__/docker.ts"
+		"seed": "ts-node --transpile-only ./src/__seeds__/docker.ts",
+		"typeorm": "node --require ts-node/register $(which typeorm)",
+		"wtype": "which typeorm"
 	},
 	"dependencies": {
 		"@koa/router": "^9.4.0",
@@ -19,6 +21,7 @@
 		"cookie-parser": "^1.4.5",
 		"cookie-session": "^1.4.0",
 		"dataloader": "^2.0.0",
+		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"graphql-depth-limit": "^1.1.0",
 		"graphql-query-complexity": "^0.7.0",
