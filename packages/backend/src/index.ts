@@ -19,6 +19,7 @@ import { run } from './utils/currentRequest';
 import {
 	COOKIE_NAME,
 	COOKIE_SECRET,
+	IS_PROD,
 	MAX_COMPLEXITY,
 	MAX_DEPTH,
 } from './config';
@@ -110,14 +111,22 @@ async function main() {
 	});
 
 	app.use((ctx, next) => {
-		if (ctx.path !== GRAPHQL_PATH) {
+		if (
+			!IS_PROD ||
+			ctx.method.toLowerCase() !== 'post' ||
+			ctx.path !== GRAPHQL_PATH
+		) {
 			return next();
 		}
 
 		const { body } = ctx.request;
 
 		if (body.query || !body.id) {
-			throw new Error('Only persisted queries are permitted.');
+			ctx.body = {
+				errors: [{ message: 'Only persisted queries are permitted.' }],
+			};
+			ctx.status = 400;
+			return;
 		}
 
 		body.query = require('../persisted-queries.json')[body.id];

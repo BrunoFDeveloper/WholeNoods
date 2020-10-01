@@ -15,3 +15,8 @@ export const MAX_DEPTH = 6;
  * The maximum amount of times we will allow users to apply to be a creator.
  */
 export const MAX_CREATOR_APPLICATIONS = 5;
+
+/**
+ * Set to `true` if running in a production environment.
+ */
+export const IS_PROD = process.env.NODE_ENV === 'production';
