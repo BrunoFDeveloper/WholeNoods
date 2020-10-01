@@ -1,10 +1,10 @@
 import clsx from 'clsx';
+import { ComponentProps } from 'react';
 
 type Props = {
 	color?: 'blue' | 'pink';
 	size?: 'small' | 'medium';
-	className?: string;
-};
+} & ComponentProps<'div'>;
 
 const COLOR_TO_CLASSNAMES = {
 	blue: 'from-indigo-500 to-teal-200 bg-teal-200',
@@ -19,15 +19,16 @@ const SIZE_TO_CLASSNAMES = {
 export default function GradBar({
 	color = 'blue',
 	size = 'medium',
-	className,
+	...props
 }: Props) {
 	return (
 		<div
+			{...props}
 			className={clsx(
 				'w-full bg-gradient-to-r',
 				COLOR_TO_CLASSNAMES[color],
 				SIZE_TO_CLASSNAMES[size],
-				className,
+				props.className,
 			)}
 		/>
 	);

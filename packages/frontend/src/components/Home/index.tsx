@@ -30,7 +30,7 @@ export default function Home() {
 						<Post post={post} />
 					))}
 				</div>
-				<div className="w-64">
+				<div className="w-80">
 					<Recommendations />
 				</div>
 			</div>
