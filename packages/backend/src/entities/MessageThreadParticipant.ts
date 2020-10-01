@@ -2,7 +2,7 @@ import { Field, ObjectType } from 'type-graphql';
 import { TypeormLoader } from 'type-graphql-dataloader';
 import { Entity, ManyToOne, RelationId, Unique } from 'typeorm';
 import { Lazy } from '../types';
-import { ExternalEntity } from './BaseEntity';
+import { ExternalEntity } from './utils/Base';
 import { MessageThread } from './MessageThread';
 import { User } from './User';
 

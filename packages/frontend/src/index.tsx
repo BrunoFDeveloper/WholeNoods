@@ -1,4 +1,5 @@
 import './index.css';
+import 'typeface-inter';
 import type {} from 'react/experimental';
 import type {} from 'react-dom/experimental';
 import { unstable_createRoot } from 'react-dom';

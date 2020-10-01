@@ -1,5 +1,4 @@
 import {
-	BaseEntity,
 	BeforeInsert,
 	CreateDateColumn,
 	Entity,
@@ -8,17 +7,12 @@ import {
 	RelationId,
 	Unique,
 } from 'typeorm';
-import { User, UserType } from './User';
+import { User } from './User';
+import { InternalEntity } from './utils/Base';
 
 @Entity()
 @Unique(['fromUser', 'toUser'])
-export class Subscription extends BaseEntity {
-	@PrimaryGeneratedColumn('uuid')
-	id!: string;
-
-	@CreateDateColumn()
-	createdAt!: Date;
-
+export class Subscription extends InternalEntity {
 	@ManyToOne(() => User, (user) => user.subscriptions)
 	fromUser!: User;
 

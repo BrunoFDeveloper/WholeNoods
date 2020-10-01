@@ -14,7 +14,7 @@ import { Post } from './Post';
 import { KoaContext, Lazy } from '../types';
 import { Subscription } from './Subscription';
 import { Follow } from './Follow';
-import { ExternalEntity } from './BaseEntity';
+import { ExternalEntity } from './utils/Base';
 import { Favorite } from './Favorite';
 import { getCurrentRequest } from '../utils/currentRequest';
 import { MessageThreadParticipant } from './MessageThreadParticipant';

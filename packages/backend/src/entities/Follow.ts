@@ -5,7 +5,7 @@ import {
 	RelationId,
 	Unique,
 } from 'typeorm';
-import { ExternalEntity } from './BaseEntity';
+import { ExternalEntity } from './utils/Base';
 import { User, UserType } from './User';
 
 // TODO: We could make Subscription EXTEND the follow.

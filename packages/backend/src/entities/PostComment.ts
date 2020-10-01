@@ -1,7 +1,7 @@
 import { Field, ObjectType } from 'type-graphql';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { Lazy } from '../types';
-import { ExternalEntity } from './BaseEntity';
+import { ExternalEntity } from './utils/Base';
 import { Post } from './Post';
 import { User } from './User';
 

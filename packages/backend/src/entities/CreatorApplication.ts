@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { Lazy } from '../types';
-import { ExternalEntity } from './BaseEntity';
+import { ExternalEntity } from './utils/Base';
 import { User, UserType } from './User';
 
 export enum ApplicationStatus {

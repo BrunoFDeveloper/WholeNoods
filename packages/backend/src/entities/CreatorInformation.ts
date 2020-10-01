@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { Lazy } from '../types';
-import { ExternalEntity } from './BaseEntity';
+import { ExternalEntity } from './utils/Base';
 import { User } from './User';
 
 @Entity()

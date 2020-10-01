@@ -29,7 +29,8 @@
     "react-router-dom": "^6.0.0-beta.0",
     "reakit": "^1.2.5",
     "relay-runtime": "^10.0.1",
-    "tailwindcss": "^1.8.9"
+    "tailwindcss": "^1.8.9",
+    "typeface-inter": "^3.15.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
