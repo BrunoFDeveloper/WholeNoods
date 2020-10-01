@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { graphql, useLazyLoadQuery } from 'react-relay/hooks';
 import { Link } from 'react-router-dom';
-import ProfileCard from './ui/ProfileCard';
+import ProfileCard from '../ui/ProfileCard';
 import { HeaderUserLinksQuery } from './__generated__/HeaderUserLinksQuery.graphql';
 
 function HeaderUserLinks() {

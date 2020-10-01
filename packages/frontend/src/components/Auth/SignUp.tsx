@@ -1,12 +1,12 @@
-import Link from './ui/Link';
+import Link from '../ui/Link';
 import { useNavigate } from 'react-router';
-import { useMst } from '../models';
+import { useMst } from '../../models';
 import { graphql, useMutation } from 'react-relay/hooks';
+import Form, { Values } from '../forms/Form';
+import Input from '../forms/Input';
+import SubmitButton from '../forms/SubmitButton';
+import Heading from '../ui/Heading';
 import { SignUpMutation } from './__generated__/SignUpMutation.graphql';
-import Form, { Values } from './forms/Form';
-import Input from './forms/Input';
-import SubmitButton from './forms/SubmitButton';
-import Heading from './ui/Heading';
 
 export default function SignUp() {
 	const navigate = useNavigate();
