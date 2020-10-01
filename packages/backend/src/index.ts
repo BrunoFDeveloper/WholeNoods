@@ -23,6 +23,7 @@ import {
 	MAX_COMPLEXITY,
 	MAX_DEPTH,
 } from './config';
+import { Session } from './entities/Session';
 
 const GRAPHQL_PATH = '/api/graphql';
 
@@ -49,16 +50,40 @@ async function main() {
 
 	app.keys = [COOKIE_SECRET];
 
-	const SESSION_CONFIG = {
-		key: COOKIE_NAME,
-		maxAge: 86400000 * 14,
-		autoCommit: true,
-		overwrite: true,
-		httpOnly: true,
-		signed: true,
-		rolling: true,
-		renew: false,
-	};
+	app.use(
+		session(
+			{
+				key: COOKIE_NAME,
+				maxAge: 86400000 * 14,
+				overwrite: true,
+				httpOnly: true,
+				signed: true,
+				rolling: true,
+				renew: false,
+				secure: IS_PROD,
+				store: {
+					// TODO: Verify that this session handling is truely sufficient:
+					async get(key, maxAge, { rolling }) {
+						const session = await Session.findOne(key);
+						return session?.data ?? false;
+					},
+					async set(key, sess, maxAge: number, { rolling, changed }) {
+						const session =
+							(await Session.findOne(key)) || Session.create({ key });
+
+						session.expiration = new Date(Date.now() + maxAge);
+						session.data = sess;
+
+						await session.save();
+					},
+					async destroy(key) {
+						await Session.delete(key);
+					},
+				},
+			},
+			app,
+		),
+	);
 
 	app.use(async (ctx: KoaContext, next) => {
 		ctx.context = {
@@ -69,7 +94,6 @@ async function main() {
 		await run(ctx.context, next);
 	});
 
-	app.use(session(SESSION_CONFIG, app));
 	app.use(bodyParser());
 
 	const server = new ApolloServer({
@@ -111,17 +135,13 @@ async function main() {
 	});
 
 	app.use((ctx, next) => {
-		if (
-			!IS_PROD ||
-			ctx.method.toLowerCase() !== 'post' ||
-			ctx.path !== GRAPHQL_PATH
-		) {
+		if (ctx.method.toLowerCase() !== 'post' || ctx.path !== GRAPHQL_PATH) {
 			return next();
 		}
 
 		const { body } = ctx.request;
 
-		if (body.query || !body.id) {
+		if (IS_PROD && (body.query || !body.id)) {
 			ctx.body = {
 				errors: [{ message: 'Only persisted queries are permitted.' }],
 			};
@@ -129,7 +149,9 @@ async function main() {
 			return;
 		}
 
-		body.query = require('../persisted-queries.json')[body.id];
+		if (body.id) {
+			body.query = require('../persisted-queries.json')[body.id];
+		}
 
 		return next();
 	});
