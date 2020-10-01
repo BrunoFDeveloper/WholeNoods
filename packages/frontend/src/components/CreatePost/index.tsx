@@ -1,8 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
 import Form, { Values } from '../forms/Form';
-import Input from '../forms/Input';
-import { useNavigate } from 'react-router-dom';
 import UploadFiles, { FileWithPreview } from './UploadFiles';
 import { graphql, useMutation } from 'react-relay/hooks';
 import TextArea from '../forms/TextArea';

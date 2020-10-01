@@ -8,6 +8,8 @@ import {
 	getComplexity,
 	fieldExtensionsEstimator,
 } from 'graphql-query-complexity';
+import createLogger from 'pino';
+import createKoaLogger from 'koa-pino-logger';
 import { ApolloServer } from 'apollo-server-koa';
 import { AuthChecker, buildSchema } from 'type-graphql';
 import { createConnection, getConnection } from 'typeorm';
@@ -28,6 +30,7 @@ import { Session } from './entities/Session';
 const GRAPHQL_PATH = '/api/graphql';
 
 async function main() {
+	const logger = createLogger();
 	await createConnection(require('../ormconfig.js'));
 
 	const authChecker: AuthChecker<Context> = (
@@ -47,6 +50,8 @@ async function main() {
 	});
 
 	const app = new Koa();
+
+	app.use(createKoaLogger({ logger }));
 
 	app.keys = [COOKIE_SECRET];
 
@@ -159,7 +164,7 @@ async function main() {
 	server.applyMiddleware({ app, path: GRAPHQL_PATH });
 
 	app.listen(4000, () => {
-		console.log('Apollo server running on port 4000.');
+		logger.info('Server running on port 4000.');
 	});
 }
 

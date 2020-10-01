@@ -8,9 +8,10 @@ export default function FormSwitch(props: Omit<Props, 'checked' | 'onToggle'>) {
 		<Controller
 			control={form.control}
 			name={props.name}
-			render={({ onChange, onBlur, value }) => (
-				<Switch {...props} checked={value} onToggle={() => onChange(!value)} />
-			)}
+			render={({ onChange, onBlur, value }) => {
+				console.log({ value });
+				return <Switch {...props} checked={value} onToggle={() => onChange(!value)} />
+			}}
 		/>
 	);
 }

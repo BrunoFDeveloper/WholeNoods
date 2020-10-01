@@ -1,4 +1,5 @@
 import Koa from 'koa';
+import { Logger } from 'pino';
 import { User, AuthType } from './entities/User';
 
 export type Session = {
@@ -13,11 +14,13 @@ export type KoaContext = Koa.ParameterizedContext & {
 };
 
 export type AuthorizedContext = {
+	log: Logger;
 	ctx: KoaContext;
 	user: User;
 };
 
 export type UnauthorizedContext = {
+	log: Logger;
 	ctx: KoaContext;
 	user?: null;
 };

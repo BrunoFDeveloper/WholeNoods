@@ -204,7 +204,6 @@ export class User extends ExternalEntity {
 
 	@Field(() => Boolean)
 	isCreator() {
-		console.log(this);
 		return this.type === UserType.CREATOR;
 	}
 
@@ -218,7 +217,6 @@ export class User extends ExternalEntity {
 			await Follow.remove(existingFollow);
 			return existingFollow;
 		}
-		console.log('CREATING');
 
 		return await Follow.create({
 			fromUser: this,
@@ -231,8 +229,6 @@ export class User extends ExternalEntity {
 			fromUser: this,
 			toUser: otherUser,
 		});
-
-		console.log(existingFollow);
 
 		return !!existingFollow;
 	}
